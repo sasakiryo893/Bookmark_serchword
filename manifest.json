@@ -5,11 +5,11 @@
   "description": "ない",
 
   "browser_action": {
-    "default_title": "おしり",
+    "default_title": "aaa",
     "default_popup": "popup.html"
   },
 
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["jQuery-3.3.1.min.js","background.js"]
   }
 }

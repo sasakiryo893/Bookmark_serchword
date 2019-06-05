@@ -1,0 +1,22 @@
+"mock":{
+  "searchList" : [
+    {
+      "id" : 1,
+      "url" : "http://example.com",
+      "search_word" : "ああああ 検索",
+      "memo" : "aaaaaaiiii"
+    },
+    {
+      "id" : 2,
+      "url" : "http://example.com",
+      "search_word" : "いいいい 検索",
+      "memo" : "aaaaaaiiii"
+    },
+    {
+      "id" : 3,
+      "url" : "http://example.com",
+      "search_word" : "うううう 検索",
+      "memo" : "aaaaaaiiii"
+    },
+  ]
+}
