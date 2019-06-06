@@ -1,4 +1,13 @@
+// $(function(){
+//   $('#site_list').append('できません');
+//   // alert("aaaaa");
+//   console.log("aaa");
+// });
+
+// $("#search").click(function(){
+//   console.log("aaaaaaaaaaa");
+// });
+
 $(function(){
-  $('.header').append("aaaaaaaああああああああ");
-  alert("aaaaa");
+  $('.aaa').append("aaaaaaa");
 });

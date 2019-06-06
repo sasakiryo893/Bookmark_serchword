@@ -1,18 +1,14 @@
 {
-  "manifest_version": 2,
-  "name": "bookmark_serchword",
-  "version": "1",
-  "description": "ない",
-
-  "browser_action": {
-    "default_title": "aaa",
-    "default_popup": "popup.html"
-  },
-
-  "background": {
-    "scripts": ["jQuery-3.3.1.min.js","background.js"]
-  }
+  "name": "拡張機能の名前",
+  "description": "拡張機能の説明",
+  "version": "1.0",
   "content_scripts": [{
-      "css": ["content_scripts.css"]
-  }]
+    "js": ["jquery-3.3.1.min.js", "background.js"],
+    "matches": ["http://*/*", "https://*/*"]
+  }],
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_title": "ツールバーのアイコンにマウスオーバーで表示されるツールチップ"
+  },
+  "manifest_version": 2
 }

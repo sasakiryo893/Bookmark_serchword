@@ -128,5 +128,9 @@
 // });
 
 $(function(){
-  $('header').append("aaaaaaa");
+  $('.site_list').append("ここに保存した検索ワード");
 });
+
+// chrome.browserAction.onClicked.addListener(function(){
+//     console.log("debug", options);
+// });

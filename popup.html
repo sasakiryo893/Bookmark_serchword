@@ -1,31 +1,16 @@
-<!DOCTYPE html>
-<html lang="ja" dir="ltr">
-  <head>
-    <meta charset="utf-8"
-    <title>title</title>
-    <script src="./jQuery-3.3.1min.js" charset="utf-8"></script>
-  </head>
-  <body>
-    <div class="content">
-      <div class="header">
-          <input type="text" name="name">
-          <input type="button" value="検索" id="surch">
-          <input type="button" value="追加" id="add">
-      </div>
-      <div class="">
-        <div class="">
-            <h2>サイト名1</h2>
-            検索ワード
-        </div>
-        <div class="">
-            <h2>サイト名2</h2>
-            検索ワード
-        </div>
-      </div>
-      <div class="">
-          <h2>サイト名3</h2>
-            検索ワード
-      </div>
-    </div>
-  </body>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="jquery-3.3.1.min.js"></script>
+  <script src="popup.js"></script>
+</head>
+<body style="width: 320px; height: 800px;">
+  <div class="header">
+    <input type="text" name="seach_word">
+    <input type="button" value="検索" id="search">
+    <input type="button" value="追加" id="add">
+  </div>
+  <div class="site_list">
+  </div>
+</body>
 </html>
