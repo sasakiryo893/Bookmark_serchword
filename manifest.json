@@ -10,5 +10,8 @@
     "default_popup": "popup.html",
     "default_title": "ツールバーのアイコンにマウスオーバーで表示されるツールチップ"
   },
-  "manifest_version": 2
+  "manifest_version": 2,
+  "background": {
+    "scripts": ["jquery-3.3.1.min.js","background.js"]
+  }
 }
