@@ -12,9 +12,9 @@ $(function(){
     let textTrim = $(this).text().substr(0,(cutFigure));
 
     if(cutFigure < textLength) {
-        $(this).html(textTrim + "...").css({visibility:'visible'});
+        $(this).html(textTrim + "...");
     } else if(cutFigure >= textLength) {
-        $(this).css({visibility:'visible'});
+        
     }
   });
 });
