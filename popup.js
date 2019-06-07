@@ -61,6 +61,7 @@ function dumpNode(bookmarkNode, query) {
                  modal: true,
                  overlay: {
                    backgroundColor: '#000',
+                     
                    opacity: 0.5
                  },
                  buttons: {
