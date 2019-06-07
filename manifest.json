@@ -3,6 +3,7 @@
   "description": "拡張機能の説明",
   "version": "1.0",
   "content_scripts": [{
+    "css": ["css/popupWindow.css","css/popup.css"],
     "js": ["js/jquery-3.3.1.min.js", "js/background.js"],
     "matches": ["http://*/*", "https://*/*"]
   }],

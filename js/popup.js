@@ -9,8 +9,21 @@ $(function(){
   })
 
   $('.add').on('click',function(){
+
     alert("追加！！！！！！！")
+    window.location.href = '/popupWindow.html';
   })
 
-  
+  $('.site_info').hover(function(){
+    $(this).css('background', '#f0f8ff');
+  },function(){
+    $(this).css('background', '');
+  });
+
+  $('.site_info').on('click',function(){
+    // alert($(this).children('.site_url'));
+    alert(JSON.stringify($(this)));
+  });
+
+
 });
