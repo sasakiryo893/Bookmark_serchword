@@ -3,7 +3,7 @@
   "description": "拡張機能の説明",
   "version": "1.0",
   "content_scripts": [{
-    "js": ["jquery-3.3.1.min.js", "background.js"],
+    "js": ["js/jquery-3.3.1.min.js", "js/background.js"],
     "matches": ["http://*/*", "https://*/*"]
   }],
   "browser_action": {
@@ -12,6 +12,6 @@
   },
   "manifest_version": 2,
   "background": {
-    "scripts": ["jquery-3.3.1.min.js","background.js"]
+    "scripts": ["js/jquery-3.3.1.min.js","js/background.js"]
   }
 }

@@ -11,6 +11,4 @@ $(function(){
   $('.add').on('click',function(){
     alert("追加！！！！！！！")
   })
-
-  
 });
