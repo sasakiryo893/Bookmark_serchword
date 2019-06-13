@@ -37,8 +37,25 @@ var TodoDao = function(){
         })
     })
   }
+/*
+    //部分検索
+    this.findOne = function(id, callback){
+      db.transaction(function (tx){
+        tx.executeSql('select id, name, url, search_word, memo from search where = ?', [id],
+          function (tx, results){
+            results.push({
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              url: results.rows.item(i).url,
+              search_word: results.rows.item(i).search_word,
+              memo: results.rows.item(i).memo,
+            })
+            callback(results)
+          })
+      })
+    }
 
-
+*/
 
 
   // 登録
@@ -49,9 +66,9 @@ var TodoDao = function(){
   }
 
   // 更新
-  this.update = function(id, site, callback){
+  this.update = function(id, site, url, word, memo, callback){
     db.transaction(function (tx){
-      tx.executeSql('update search set name = ? where id = ?', [site, id], callback)
+      tx.executeSql('update search set name = ?, url = ?, search_word = ?, memo = ? where id = ?', [site, url, word, memo, id], callback)
     })
   }
 
@@ -76,11 +93,13 @@ var TodoDao = function(){
 var tododao = new TodoDao()
 
 $(document).ready(function(){
+  /*
   // イベントハンドラ登録
   $('input[name=site_input]').keyup(function(v){
     $('button[name=register], button[name=edit]')
       .prop('disabled', $(this).val() == 0)
   })
+  */
   $('button[name=register]').on('click', register)
   $('#table tbody').on('click', 'tr td button[name=edit]', edit)
   $('#table tbody').on('click', 'tr td button[name=remove]', remove)
@@ -107,7 +126,23 @@ var init = function(){
         </tr>
       `)
     })
-
+/*
+    //Todo表示（一部）
+    tododao.findOne(function(results){
+      $.each(list, function(i, e){
+        $('#table tbody').append(`
+          <tr>
+            <td>${e.id}</td>
+            <td>${e.name}</td>
+            <td>${e.url}</td>
+            <td>${e.search_word}</td>
+            <td>${e.memo}</td>
+            <td><button type="button" name="edit" value="${e.id}">更新</button></td>
+            <td><button type="button" name="remove" value="${e.id}">削除</button></td>
+          </tr>
+        `)
+      })
+*/
     // TODOテキストボックス、ボタンの初期化
     $('input[name=site_input]').val('').focus().keyup()
     $('input[name=url_input]').val('').focus().keyup()
@@ -128,8 +163,20 @@ var register = function(){
 // 更新
 var edit = function(){
   var id = $(this).val()
+  //var name = $('input[name=site_input]').val()
   var name = $('input[name=site_input]').val()
-  tododao.update(id, name, init)
+  var url = $('input[name=url_input]').val()
+  var word = $('input[name=word_input]').val()
+  var memo = $('input[name=memo_input]').val()
+  /*$(this).html('<input type="text" value="' +name+ '"/>')
+  $('input[name=site_input]').focus().blur(function(){
+    val inputVal = $(this).val();
+    if(inputVal ===''){
+      inputVal = this.defaullValue;
+    }
+    $(this).parent().removeClass('on').text(inputVal)
+  })*/
+  tododao.update(id, name, url, word, memo, init)
 }
 
 // 削除
