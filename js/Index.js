@@ -2,7 +2,7 @@ var TodoDao = function(){
   var name = 'localdb'
   var version = '1.0'
   var description = 'Web SQL Database'
-  var size = 2 * 1024 * 1024
+  var size = 5 * 1024 * 1024
   var db = openDatabase(name, version, description, size)
 
   // テーブル作成
