@@ -3,6 +3,7 @@
     <head>
         <title>csv</title>
         <meta charset="utf-8">
+        <meta
     </head>
     <body>
        <div>
@@ -29,6 +30,7 @@
         </div>
         <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/0.8.9/jquery.csv.min.js"></script>
+        <script src="test.csv"></script>
         <script>
             var id;
             var name;
@@ -36,7 +38,7 @@
             var search_word;
             var memo;
             var data;
-            
+
             function readCsv(data) {
                 var target = '#csv-body';
                 var csv = $.csv.toArrays(data);
@@ -52,19 +54,19 @@
                 });
                 $(target).append(insert);
             }
-            var csvfile = 'test.csv';
-            
+            var csvfile = './test.csv';
+
             $(function(){
                 $.get(csvfile, readCsv, 'text');
-                
+
                 $('.btn').click(function() {
                     getdata();
                     $('tbody').append(data);
                     $('.slide').slideDown("fast");
                 });
             });
-            
-            
+
+
             function getdata(){
                 id=$('.id').val();
                 name=$('.name').val();
@@ -73,8 +75,8 @@
                 memo=$('.memo').val();
                 data='<tr><th>' + id + '</th><th>' + name + '</th><th>' + url + '</th><th>' + word + '</th><th>' + memo + '</th></tr>';
             }
-            
-            
+
+
         </script>
     </body>
 </html>
