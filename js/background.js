@@ -1,9 +1,15 @@
 //データベースから登録したサイトを表示
 
 $(function(){
-  console.log("aaaa");
-  $('.site').before("aaaa");
-  console.log(chrome.runtime.getURL("list_test.json"));
+  chrome.history.search({
+    text: '- Google 検索',
+    maxResults: 10
+  },
+  function (results) {
+    for(var i = 0; i < results.length; i++) {
+      console.table(results[i].title.replace('- Google 検索', ''));
+    };
+  });
 
   //タイトルが長すぎたときに文末を省略
   $('.site_title').each(function(){
@@ -12,7 +18,7 @@ $(function(){
     let textTrim = $(this).text().substr(0,(cutFigure));
 
     if(cutFigure < textLength) {
-        $(this).html(textTrim + "...").css({visibility:'visible'});
+        $(this).html(textTrim + "...").css({visibility:'visible',fontSize:'15px'});
     } else if(cutFigure >= textLength) {
         $(this).css({visibility:'visible'});
     }

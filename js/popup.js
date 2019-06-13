@@ -1,30 +1,33 @@
 $(function(){
   // $('.site_list').append("ここに保存した検索ワード");
 
-  //検索
+  //検索ワード検索
   $('.search').on('click',function(){
-    alert($('.search_word').val() + "で検索！！！！！！！")
+    alert($('.search_word').val() + "で検索！！！！！！！");
+    alert($('.site_info').children('.site_search_word').text());
   })
 
   //追加
   $('.add').on('click',function(){
-
-    alert("追加！！！！！！！")
     window.location.href = '/popupWindow.html';
   })
 
-  //mausehoverで色を変える
-  $('.site_info').hover(function(){
-    $(this).css('background', '#f0f8ff');
-  },function(){
-    $(this).css('background', '');
+  $('.site_info').on({
+    // 遷移後のURLを取得し新しいタブで開く
+    'click' : function(){
+      let url = $(this).children('.site_url').text();
+      window.open(url,'_brank');
+    },
+    'contextmenu' : function(){
+      alert("みぎくり")
+    },
+    // mausehoverで色を変える
+    'mouseenter' : function(){
+      $(this).css('background', '#f0f8ff');
+    },
+    // 色消す
+    'mouseleave' : function(){
+      $(this).css('background', '');
+    }
   });
-
-  //遷移後のURLを取得し新しいタブで開く
-  $('.site_info').on('click',function(){
-    let url = $(this).children('.site_url').text();
-    window.open(url,'_brank');
-  });
-
-
 });
