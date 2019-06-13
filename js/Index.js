@@ -8,9 +8,12 @@ var TodoDao = function(){
   // テーブル作成
   db.transaction(function(tx){
     tx.executeSql(`
-      create table if not exists todo (
+      create table if not exists search (
         id integer primary key autoincrement,
-        todo varchar
+        name varchar(300) not null,
+        url varchar(2083) not null,
+        search_word varchar(100) null,
+        memo text null
       )
     `)
   })
@@ -18,13 +21,16 @@ var TodoDao = function(){
   // 全件検索
   this.findAll = function(callback){
     db.transaction(function (tx){
-      tx.executeSql('select * from todo', [],
+      tx.executeSql('select * from search', [],
         function (tx, results){
           var list = []
           for (i = 0; i < results.rows.length; i++){
             list.push({
               id: results.rows.item(i).id,
-              todo: results.rows.item(i).todo
+              name: results.rows.item(i).name,
+              url: results.rows.item(i).url,
+              search_word: results.rows.item(i).search_word,
+              memo: results.rows.item(i).memo,
             })
           }
           callback(list)
@@ -36,38 +42,42 @@ var TodoDao = function(){
 
 
   // 登録
-  this.insert = function(todo, callback){
+  this.insert = function(site, callback){
     db.transaction(function (tx){
-      tx.executeSql('insert into todo (todo) values (?)', [todo], callback)
+      tx.executeSql('insert into search (name, url, search_word, memo) values (?, "url", "word", "memo")', [site], callback)
     })
   }
 
   // 更新
-  this.update = function(id, todo, callback){
+  this.update = function(id, site, callback){
     db.transaction(function (tx){
-      tx.executeSql('update todo set todo = ? where id = ?', [todo, id], callback)
+      tx.executeSql('update search set name = ? where id = ?', [site, id], callback)
     })
   }
 
   // 削除
   this.remove = function(id, callback){
     db.transaction(function (tx){
-      tx.executeSql('delete from todo where id = ?', [id], callback)
+      tx.executeSql('delete from search where id = ?', [id], callback)
     })
   }
 
 }
 
 
+
+
 // ↑ TodoDao.js
 // ↓ index.js
+
+
 
 // DAOインスタンス
 var tododao = new TodoDao()
 
 $(document).ready(function(){
   // イベントハンドラ登録
-  $('input[name=todo]').keyup(function(v){
+  $('input[name=name_input]').keyup(function(v){
     $('button[name=register], button[name=edit]')
       .prop('disabled', $(this).val() == 0)
   })
@@ -87,8 +97,11 @@ var init = function(){
     $.each(list, function(i, e){
       $('#table tbody').append(`
         <tr>
-          <td>${i+1}</td>
-          <td>${e.todo}</td>
+          <td>${e.id}</td>
+          <td>${e.name}</td>
+          <td>${e.url}</td>
+          <td>${e.search_word}</td>
+          <td>${e.memo}</td>
           <td><button type="button" name="edit" value="${e.id}">更新</button></td>
           <td><button type="button" name="remove" value="${e.id}">削除</button></td>
         </tr>
@@ -96,21 +109,21 @@ var init = function(){
     })
 
     // TODOテキストボックス、ボタンの初期化
-    $('input[name=todo]').val('').focus().keyup()
+    $('input[name=name_input]').val('').focus().keyup()
   })
 }
 
 // 登録
 var register = function(){
-  var todo = $('input[name=todo]').val()
-  tododao.insert(todo, init)
+  var name = $('input[name=name_input]').val()
+  tododao.insert(name, init)
 }
 
 // 更新
 var edit = function(){
   var id = $(this).val()
-  var todo = $('input[name=todo]').val()
-  tododao.update(id, todo, init)
+  var name = $('input[name=name_input]').val()
+  tododao.update(id, name, init)
 }
 
 // 削除
