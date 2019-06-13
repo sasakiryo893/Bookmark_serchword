@@ -42,9 +42,9 @@ var TodoDao = function(){
 
 
   // 登録
-  this.insert = function(site, callback){
+  this.insert = function(site, url, word, memo, callback){
     db.transaction(function (tx){
-      tx.executeSql('insert into search (name, url, search_word, memo) values (?, "url", "word", "memo")', [site], callback)
+      tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo], callback)
     })
   }
 
@@ -77,7 +77,7 @@ var tododao = new TodoDao()
 
 $(document).ready(function(){
   // イベントハンドラ登録
-  $('input[name=name_input]').keyup(function(v){
+  $('input[name=site_input]').keyup(function(v){
     $('button[name=register], button[name=edit]')
       .prop('disabled', $(this).val() == 0)
   })
@@ -109,20 +109,26 @@ var init = function(){
     })
 
     // TODOテキストボックス、ボタンの初期化
-    $('input[name=name_input]').val('').focus().keyup()
+    $('input[name=site_input]').val('').focus().keyup()
+    $('input[name=url_input]').val('').focus().keyup()
+    $('input[name=word_input]').val('').focus().keyup()
+    $('input[name=memo_input]').val('').focus().keyup()
   })
 }
 
 // 登録
 var register = function(){
-  var name = $('input[name=name_input]').val()
-  tododao.insert(name, init)
+  var site = $('input[name=site_input]').val()
+  var url = $('input[name=url_input]').val()
+  var word = $('input[name=word_input]').val()
+  var memo = $('input[name=memo_input]').val()
+  tododao.insert(site, url, word, memo, init)
 }
 
 // 更新
 var edit = function(){
   var id = $(this).val()
-  var name = $('input[name=name_input]').val()
+  var name = $('input[name=site_input]').val()
   tododao.update(id, name, init)
 }
 
