@@ -1,8 +1,31 @@
 $(function(){
   // サイト名、URLを取得
   chrome.tabs.getSelected(null, function(tab) {
-    $('#input_site').html(tab.title);
-    $('#input_url').html(tab.url);
+
+    //バイト数が35バイト以上なら3点リーダをつける
+    function substr(text, len, truncation) {
+      if (truncation === undefined) { truncation = '…'; }
+      var text_array = text.split('');
+      var count = 0;
+      var str = '';
+      for (i = 0; i < text_array.length; i++) {
+        var n = escape(text_array[i]);
+        if (n.length < 4) count++;
+        else count += 2;
+        if (count > len) {
+          return str + truncation;
+        }
+        str += text.charAt(i);
+      }
+      return text;
+    }
+
+    let input_text = substr(tab.title,36,'…');
+    let input_text_url = substr(tab.url,36,'…');
+
+    $('#input_site').html(input_text);
+    $('#input_url').html(input_text_url);
+
   });
 
   // 最近の検索ワード10件を取得してプルダウンメニューに挿入
