@@ -24,7 +24,13 @@ $(function(){
     alert($('.memo').val());
   });
 
+  // topに戻る
   $('#Bt_Cancel').on('click',function(){
     window.location.href = '/popup.html';
+  })
+
+  // close
+  $('.close').on('click',function(){
+    window.close();
   })
 });

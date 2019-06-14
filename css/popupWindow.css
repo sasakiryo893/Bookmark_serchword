@@ -50,8 +50,8 @@
 }
 
 .memo {
-    margin: 0 10px;
-    width: 380px;
+    margin: 10px 0px;
+    width: 400px;
     height: 90px;
     resize: vertical;
 }
