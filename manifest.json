@@ -1,6 +1,6 @@
 {
-  "name": "拡張機能の名前",
-  "description": "拡張機能の説明",
+  "name": "Bookmark_searchword",
+  "description": "検索ワードを含めたブックマーク登録",
   "version": "1.0",
   "content_scripts": [{
     "css": ["css/popupWindow.css","css/popup.css"],

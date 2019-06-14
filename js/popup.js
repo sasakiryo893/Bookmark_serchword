@@ -11,13 +11,13 @@ $(function() {
      dumpBookmarks($('#search').val());
   });
   //検索ワード検索
-  $('.search').on('click',function(){
-    alert($('.search_word').val() + "で検索！！！！！！！");
+  $('#Bt_Search').on('click',function(){
+    alert($('#Search_Word').val() + "で検索！！！！！！！");
     alert($('.site_info').children('.site_search_word').text());
   });
 
   //追加
-  $('.add').on('click',function(){
+  $('#Bt_Add').on('click',function(){
     window.location.href = '/popupWindow.html';
     // $('.dialog').show()
   })

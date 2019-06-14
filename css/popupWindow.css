@@ -13,10 +13,11 @@
 .popup {
   margin: 5px auto;
   padding: 20px;
+  padding-top: 0px;
   /* border: 1px solid;
   background: #fff;
   border-radius: 5px; */
-  width: 400px;
+  width: 440px;
   height: 300px;
   position: relative;
 }
@@ -26,7 +27,7 @@
   color: #333;
   font-family: Tahoma, Arial, sans-serif;
 }
-.popup .close {
+/* .popup {
   position: absolute;
   top: 0px;
   right: 10px;
@@ -35,7 +36,7 @@
   font-weight: bold;
   text-decoration: none;
   color: #333;
-}
+} */
 .popup .close:hover {
   color: #06D85F;
 }
@@ -56,7 +57,7 @@
     resize: vertical;
 }
 
-#site_name {
+/* #site_name {
     width: 90px;
     position: relative;
 }
@@ -67,13 +68,12 @@
     bottom: 17px;
     white-space:nowrap;
     overflow:hidden;
-    text-overflow:ellipsis;
 }
 
 #url_name {
     margin: 0px;
     width: 90px;
-    /* position: relative; */
+    /* position: relative;
 }
 
 #input_url {
@@ -81,9 +81,9 @@
     left: 100px;
     bottom: 17px;
     witdh: 300px;
-}
+} */
 
-#search_name {
+/* #search_name {
     width: 100px;
     position: relative;
 }
@@ -92,39 +92,29 @@
     position: relative;
     left: 100px;
     bottom: 17px;
-}
+} */
 
-#Bt_Regi {
+/* #Bt_Regi {
     position: relative;
     left: 100px;
-    top: 6px;
+    bottom: 0px; */
 
-    display: inline-block;
+    /* display: inline-block;
     padding: 0.5em 1em;
     text-decoration: none;
     color: #67c5ff;
     border: dashed 1px #67c5ff;
     background: #f2fcff;
     border-radius: 3px;
-    transition: .4s;
-}
+    transition: .4s; */
+/* } */
 
-#Bt_Regi:hover {
+/* #Bt_Regi:hover {
   background: #cbedff;
   color: #FFF;
-}
+} */
 
-#Bt_Cancel {
+/* #Bt_Cancel {
     position: relative;
     left: 250px;
-    bottom: 20px;
-}
-
-@media screen and (max-width: 400px){
-  .box{
-    width: 100%;
-  }
-  .popup{
-    width: 100%;
-  }
-}
+} */
