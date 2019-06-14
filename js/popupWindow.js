@@ -22,7 +22,7 @@ $(function(){
     }
 
     let input_text = substr(tab.title,36,'…');
-    let input_text_url = substr(tab.url,36,'…');
+    let input_text_url = substr(tab.url,40,'…');
 
     $('#input_site').html(input_text);
     $('#input_url').html(input_text_url);
@@ -89,5 +89,5 @@ var Dao = function(){
       tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo])
     })
   }
-  
+
 }
