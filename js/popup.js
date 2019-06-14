@@ -30,5 +30,6 @@ $(function(){
     'mouseleave' : function(){
       $(this).css('background', '');
     }
+    
   });
 });
