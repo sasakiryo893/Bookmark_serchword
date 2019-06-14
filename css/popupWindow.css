@@ -79,7 +79,8 @@
 #input_url {
     position: relative;
     left: 100px;
-    bottom: 17px
+    bottom: 17px;
+    width: 300px;
 }
 
 #search_name {
@@ -97,6 +98,20 @@
     position: relative;
     left: 100px;
     top: 6px;
+
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    color: #67c5ff;
+    border: dashed 1px #67c5ff;
+    background: #f2fcff;
+    border-radius: 3px;
+    transition: .4s;
+}
+
+#Bt_Regi:hover {
+  background: #cbedff;
+  color: #FFF;
 }
 
 #Bt_Cancel {

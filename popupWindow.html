@@ -1,8 +1,11 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href=css/reset.css>
+    <!-- <link rel="stylesheet" href=css/bootstrap.min.css> -->
     <link rel="stylesheet" href=css/popupWindow.css>
+
     <script src="js/jquery-3.3.1.min.js"></script>
+    <!-- <script src="js/bootstrap.bundle.min.js"></script> -->
     <script src="js/popupWindow.js"></script>
 </head>
 
@@ -11,20 +14,20 @@
 <div id="popup1">
 	<div class="popup">
 
-		<a class="close" href="#">&times;</a>
+		<a class="close">&times;</a>
 		<div class="content">
             <div class="under_line">
-                <div id="site_name"><h3>サイト名</h3></div>
+                <div id="site_name">サイト名</div>
                 <div id="input_site"><p>○○○○○○○○○○○○</p></div>
             </div>
 
 			<div class="under_line">
-                <div id="url_name"><h3>url</h3></div>
+                <div id="url_name">url</div>
                 <div id="input_url">○○○○○○○○○○○</div>
             </div>
 
             <div class="under_line">
-                <div id="search_name"><h3>検索ワード</h3></div>
+                <div id="search_name">検索ワード</div>
                 <div id="input_search">
                     <select style="width:300px;" name="search_word" id="search_word">
 
@@ -33,13 +36,13 @@
             </div>
 
             <div class="memo_name">
-              <h3>MEMO</h3>
+              MEMO
             </div>
             <div class="memowrap"><textarea class="memo" type="text" rows="5" cols="45" name="memo"></textarea></div>
         </div>
 
         <div>
-            <button type="button" id="Bt_Regi">登録</button>
+            <button type="button" id="Bt_Regi" class="btn btn-primary">登録</button>
         </div>
         <div>
             <button type="button" id="Bt_Cancel">キャンセル</button>
