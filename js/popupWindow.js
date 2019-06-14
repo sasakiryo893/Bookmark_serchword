@@ -42,8 +42,8 @@ $(function(){
 
   // 登録
   $('#Bt_Regi').on('click',function(){
-    var site = $('div#input_site').val()
-    var url = $('div#input_url').val()
+    var site = $('div#input_site').text()
+    var url = $('div#input_url').text()
     var word = $('select#search_word').val()
     var memo = $('textarea#input_memo').val()
     dao.insert(site, url, word, memo)
@@ -70,24 +70,11 @@ var Dao = function(){
   var size = 5 * 1024 * 1024
   var db = openDatabase(name, version, description, size)
 
-  // テーブル作成
-  db.transaction(function(tx){
-    tx.executeSql(`
-      create table if not exists search (
-        id integer primary key autoincrement,
-        name varchar(300) not null,
-        url varchar(2083) not null,
-        search_word varchar(100) null,
-        memo text null
-      )
-    `)
-  })
-
   // 登録
   this.insert = function(site, url, word, memo){
     db.transaction(function (tx){
       tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo])
     })
   }
-  
+
 }
