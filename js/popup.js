@@ -7,12 +7,12 @@ $(function() {
   $('#search').change(function() {
      $('#bookmarks').empty();
      dumpBookmarks($('#search').val());
-
+  });
   //検索ワード検索
   $('.search').on('click',function(){
     alert($('.search_word').val() + "で検索！！！！！！！");
     alert($('.site_info').children('.site_search_word').text());
-  })
+  });
 
   //追加
   $('.add').on('click',function(){
@@ -39,6 +39,7 @@ $(function() {
     }
   });
 });
+
 // Traverse the bookmark tree, and print the folder and nodes.
 function dumpBookmarks(query) {
   var bookmarkTreeNodes = chrome.bookmarks.getTree(
