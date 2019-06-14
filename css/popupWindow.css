@@ -13,6 +13,7 @@
 .popup {
   margin: 5px auto;
   padding: 20px;
+  padding-top: 0px;
   /* border: 1px solid;
   background: #fff;
   border-radius: 5px; */
@@ -26,7 +27,7 @@
   color: #333;
   font-family: Tahoma, Arial, sans-serif;
 }
-.popup .close {
+/* .popup {
   position: absolute;
   top: 0px;
   right: 10px;
@@ -35,7 +36,7 @@
   font-weight: bold;
   text-decoration: none;
   color: #333;
-}
+} */
 .popup .close:hover {
   color: #06D85F;
 }
@@ -56,7 +57,7 @@
     resize: vertical;
 }
 
-#site_name {
+/* #site_name {
     width: 90px;
     position: relative;
 }
@@ -72,7 +73,7 @@
 #url_name {
     margin: 0px;
     width: 90px;
-    /* position: relative; */
+    /* position: relative;
 }
 
 #input_url {
@@ -80,9 +81,9 @@
     left: 100px;
     bottom: 17px;
     witdh: 300px;
-}
+} */
 
-#search_name {
+/* #search_name {
     width: 100px;
     position: relative;
 }
@@ -91,7 +92,7 @@
     position: relative;
     left: 100px;
     bottom: 17px;
-}
+} */
 
 /* #Bt_Regi {
     position: relative;
