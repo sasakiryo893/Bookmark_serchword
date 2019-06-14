@@ -10,6 +10,7 @@ $(function(){
   //追加
   $('.add').on('click',function(){
     window.location.href = '/popupWindow.html';
+    // $('.dialog').show()
   })
 
   $('.site_info').on({

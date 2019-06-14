@@ -23,4 +23,8 @@ $(function(){
     alert($('#search_word option:selected').text());
     alert($('.memo').val());
   });
+
+  $('#Bt_Cancel').on('click',function(){
+    window.location.href = '/popup.html';
+  })
 });

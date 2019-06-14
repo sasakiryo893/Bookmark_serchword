@@ -5,43 +5,76 @@
   <link rel="stylesheet" href=css/popup.css>
 
   <script src="js/jquery-3.3.1.min.js"></script>
-  <script src="js/popup.js"></script>
   <script src="js/background.js"></script>
+  <script src="js/popup.js"></script>
 
 </head>
 <body style="width: 320px; height: 800px;">
-  <div class="header">
-    <input type="text" name="search_word" class="search_word">
-    <input type="button" value="検索" class="search">
-    <input type="button" value="追加" class="add">
-  </div>
-  <hr>
-  <div class="site_list">
+  <div class="container">
+    <div class="header">
+      <input type="text" name="search_word" class="search_word">
+      <input type="button" value="検索" class="search">
+      <input type="button" value="追加" class="add">
+    </div>
+    <hr>
+    <div class="site_list">
+      <div class="site_info">
+        <div class="site_title" style="margin-bottom:3px">
+          <h2>2019/06/04 『体系的に学ぶ安全なWebアプリケーションの作り方第2版 脆弱性が生まれる原理と対策の実践』応用講座 (徳丸本応用講座) - Qiita</h2>
+        </div>
+        <div class="site_search_word">
+          検索ワード   web 脆弱性 qiita
+        </div>
+        <div class="site_url">
+          https://qiita.com/rana_kualu/items/f7155fa63180aee3579a
+        </div>
+      </div>
 
-    <div class="site_info">
-      <div class="site_title" style="margin-bottom:3px">
-        <h2>2019/06/04 『体系的に学ぶ安全なWebアプリケーションの作り方第2版 脆弱性が生まれる原理と対策の実践』応用講座 (徳丸本応用講座) - Qiita</h2>
-      </div>
-      <div class="site_search_word">
-        検索ワード   web 脆弱性 qiita
-      </div>
-      <div class="site_url">
-        https://qiita.com/rana_kualu/items/f7155fa63180aee3579a
+      <div class="site_info">
+        <div class="site_title">
+          <h2>Amazon Cognito UserPools を JavaScript から使ってみる - Qiita</h5>
+        </div>
+        <div class="site_search_word">
+          検索ワード   js cognite
+        </div>
+        <div class="site_url">
+          https://qiita.com/kusokamayarou/items/60bcf9d16ce0df93b0ea
+        </div>
       </div>
     </div>
+    <!-- <div class="layer"></div>
+    <div class="dialog">
+      <a class="close" href="#">&times;</a>
+  		<div class="content">
+              <div class="under_line">
+                  <div id="site_name"><h3>サイト名</h3></div>
+                  <div id="input_site"><p>○○○○○○○○○○○○</p></div>
+              </div>
 
-    <div class="site_info">
-      <div class="site_title">
-        <h2>Amazon Cognito UserPools を JavaScript から使ってみる - Qiita</h5>
-      </div>
-      <div class="site_search_word">
-        検索ワード   js cognite
-      </div>
-      <div class="site_url">
-        https://qiita.com/kusokamayarou/items/60bcf9d16ce0df93b0ea
-      </div>
+  			<div class="under_line">
+                  <div id="url_name"><h3>url</h3></div>
+                  <div id="input_url">○○○○○○○○○○○</div>
+              </div>
+
+              <div class="under_line">
+                  <div id="search_name"><h3>検索ワード</h3></div>
+                  <div id="input_search">
+                      <select name="search_word" id="search_word">
+
+                      </select>
+                  </div>
+              </div>
+
+              <div class="memowrap"><textarea class="memo" type="text" rows="5" cols="45" name="memo"></textarea></div>
+          </div>
+
+          <div>
+              <button type="button" id="Bt_Regi">登録</button>
+          </div>
+          <div>
+              <button type="button" id="Bt_Cancel" onclick="window.history.back();">キャンセル</button>
+          </div> -->
     </div>
-
   </div>
 </body>
 </html>
