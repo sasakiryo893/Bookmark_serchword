@@ -1,15 +1,19 @@
 {
-  "manifest_version": 2,
-  "name": "bookmark_serchword",
-  "version": "1",
-  "description": "ない",
-
+  "name": "Bookmark_searchword",
+  "description": "検索ワードを含めたブックマーク登録",
+  "version": "1.0",
+  "content_scripts": [{
+    "css": ["css/popupWindow.css","css/popup.css"],
+    "js": ["js/jquery-3.3.1.min.js", "js/background.js"],
+    "matches": ["http://*/*", "https://*/*"]
+  }],
   "browser_action": {
-    "default_title": "おしり",
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "これが拡張なのか"
   },
-
+  "manifest_version": 2,
   "background": {
-    "scripts": ["background.js"]
-  }
+    "scripts": ["js/jquery-3.3.1.min.js","js/background.js"]
+  },
+  "permissions": ["tabs","history"]
 }
