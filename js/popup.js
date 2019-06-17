@@ -22,6 +22,10 @@ $(function() {
     // $('.dialog').show()
   })
 
+  $('.delete').on('click', function() {
+    dao.delete(init(dao))
+  })
+
   $('div.site_info').on({
     // 遷移後のURLを取得し新しいタブで開く
     'click' : function(){
@@ -113,6 +117,12 @@ var Dao = function(){
           callback(list);
         });
     });
+  }
+
+  this.delete = function(callback){
+    db.transaction(function (tx){
+      tx.executeSql('drop table search')
+    })
   }
 
 }
