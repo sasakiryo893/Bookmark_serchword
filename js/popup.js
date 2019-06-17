@@ -16,10 +16,10 @@ $(function() {
     window.location.href = '/popupWindow.html';
   })
 
-  $(document).on('click','.site_info',function(){
-      let url = $(this).children('.hidden_url').text();
-      window.open(url,'_brank');
-  });
+$(document).on('click','.site_info',function(){
+    let url = $(this).children('.hidden_url').text();
+    window.open(url,'_brank');
+});
 
   $(document).on('mouseover','.site_info',function(){
       $(this).css('background', '#f0f8ff');
