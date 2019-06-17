@@ -4,11 +4,123 @@
 
 // Search the bookmarks when entering the search keyword.
 $(function() {
+  var dao = new Dao()
+
   $('#search').change(function() {
      $('#bookmarks').empty();
      dumpBookmarks($('#search').val());
   });
+  //検索ワード検索
+  $('#Bt_Search').on('click',function(){
+    alert($('#Search_Word').val() + "で検索！！！！！！！");
+    alert($('.site_info').children('.site_search_word').text());
+  });
+
+  //追加
+  $('#Bt_Add').on('click',function(){
+    window.location.href = '/popupWindow.html';
+    // $('.dialog').show()
+  })
+
+  $('div.site_info').on({
+    // 遷移後のURLを取得し新しいタブで開く
+    'click' : function(){
+      alert("click")
+      let url = $(this).children('.site_url').text();
+      window.open(url,'_brank');
+    },
+    'contextmenu' : function(){
+      alert("みぎくり")
+    },
+    // mausehoverで色を変える
+    'mouseenter' : function(){
+      $(this).css('background', '#f0f8ff');
+    },
+    // 色消す
+    'mouseleave' : function(){
+      $(this).css('background', '');
+    }
+  });
+  init(dao)
 });
+
+
+
+var init = function(dao){
+  // TODO表の削除
+  $('.site_list').empty()
+  // TODO表の表示
+  dao.findAll(function(list){
+    $.each(list, function(i, e){
+      $('.site_list').append(`
+        <tr>
+          <td>
+            <div class="site_info">
+              <div class="site_title" style="margin-bottom:3px">
+                <h2>${e.name}</h2>
+              </div>
+              <div class="site_search_word">
+                ${e.search_word}
+              </div>
+              <div class="site_url">
+                ${e.url}
+              </div>
+            </div>
+          </td>
+        </tr>
+        `);
+      });
+  });
+}
+
+
+
+var Dao = function(){
+  var name = 'localdb'
+  var version = '1.0'
+  var description = 'Web SQL Database'
+  var size = 5 * 1024 * 1024
+  var db = openDatabase(name, version, description, size)
+
+  // テーブル作成
+  db.transaction(function(tx){
+    tx.executeSql(`
+      create table if not exists search (
+        id integer primary key autoincrement,
+        name varchar(300) not null,
+        url varchar(2083) not null,
+        search_word varchar(100) null,
+        memo text null
+      )
+    `)
+  })
+  // 全件検索
+
+  this.findAll = function(callback){
+    db.transaction(function (tx){
+      tx.executeSql('select * from search', [],
+        function (tx, results){
+          var list = []
+          for (i = 0; i < results.rows.length; i++){
+            list.push({
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              url: results.rows.item(i).url,
+              search_word: results.rows.item(i).search_word,
+              memo: results.rows.item(i).memo,
+            });
+          };
+          callback(list);
+        });
+    });
+  }
+
+}
+
+
+
+
+
 // Traverse the bookmark tree, and print the folder and nodes.
 function dumpBookmarks(query) {
   var bookmarkTreeNodes = chrome.bookmarks.getTree(
@@ -34,10 +146,10 @@ function dumpNode(bookmarkNode, query) {
     var anchor = $('<a>');
     anchor.attr('href', bookmarkNode.url);
     anchor.text(bookmarkNode.title);
-    /*
-     * When clicking on a bookmark in the extension, a new tab is fired with
-     * the bookmark url.
-     */
+
+     //When clicking on a bookmark in the extension, a new tab is fired with
+     //the bookmark url.
+
     anchor.click(function() {
       chrome.tabs.create({url: bookmarkNode.url});
     });

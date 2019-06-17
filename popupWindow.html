@@ -1,0 +1,61 @@
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href=css/reset.css>
+  <link rel="stylesheet" href=css/bootstrap.min.css>
+  <link rel="stylesheet" href=css/popupWindow.css>
+
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
+  <script src="js/popupWindow.js"></script>
+</head>
+
+<body>
+
+  <div id="popup1">
+    <div class="header row ml-2">
+      <div class="regi pl-0 col mt-3">
+        登録画面
+      </div>
+      <div class="col-auto"></div>
+      <a class="close col text-right mr-2">&times;</a>
+    </div>
+    <div class="popup">
+      <div class="content">
+        <div class="under_line row">
+          <div id="site_name" class="col-3 px-0">サイト名</div>
+          <div id="input_site" class="col-9 px-0">○○○○○○○○○○○○</div>
+        </div>
+
+        <div class="under_line row">
+          <div id="url_name" class="col-3 px-0">url</div>
+          <div id="input_url" class="col-9 px-0">○○○○○○○○○○○</div>
+        </div>
+
+        <div class="under_line row">
+          <div id="search_name" class="col-3 px-0">検索ワード</div>
+          <div id="input_search" class="col-9 px-0">
+            <select style="width:300px;" name="search_word" id="search_word">
+
+            </select>
+          </div>
+        </div>
+
+        <div class="memo_name">MEMO</div>
+        <div class="memowrap"><textarea class="memo" type="text" rows="5" cols="45" id="input_memo" name="memo"></textarea></div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="btn-toolbar mb-4 mt-2">
+          <div>
+            <button type="button" id="Bt_Regi" class="btn btn-primary mr-5">登録</button>
+          </div>
+          <div>
+            <button type="button" id="Bt_Cancel" class="btn btn-secondary ml-5">キャンセル</button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</body>
