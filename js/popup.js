@@ -109,7 +109,7 @@ var init = function(dao){
             </p>
           </div>
           <div class="site_url">
-            ${url_short}
+            <p>${url_short}</p>
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}
