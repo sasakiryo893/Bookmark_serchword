@@ -38,6 +38,10 @@ $(document).on('mouseover','.site_info',function(){
 $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
 });
+$(document).on('contextmenu','.site_info',function(){
+  //alert($(this).children('.hidden_id').text());
+  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text() + "?site=" + $(this).children('.hidden_name').text()  + "?url=" + $(this).children('.hidden_url').text() + "?memo=" + $(this).children('.hidden_memo').text();
+});
 
 $('.site_list').ready(function(){
   let input_text = substr($('.site_title').text(),10,'…');
@@ -91,6 +95,15 @@ var init = function(dao){
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}
+          </div>
+          <div class="hidden_id" style="display:none">
+            ${e.id}
+          </div>
+          <div class="hidden_name" style="display:none">
+            ${e.name}
+          </div>
+          <div class="hidden_memo" style="display:none">
+            ${e.memo}
           </div>
         </div>
         `);
