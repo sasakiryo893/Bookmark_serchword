@@ -16,28 +16,22 @@ $(function() {
     window.location.href = '/popupWindow.html';
   })
 
-  $('#Bt_Delete').on('click', function() {
-    dao.delete(init(dao))
-  })
+  $(document).on('click','.site_info',function(){
+      let url = $(this).children('.hidden_url').text();
+      window.open(url,'_brank');
+  });
 
-  init(dao);
-});
+  $(document).on('mouseover','.site_info',function(){
+      $(this).css('background', '#f0f8ff');
+  });
 
-$(document).on('click','.site_info',function(){
-    let url = $(this).children('.hidden_url').text();
-    window.open(url,'_brank');
-});
-
-$(document).on('mouseover','.site_info',function(){
-    $(this).css('background', '#f0f8ff');
-});
-
-$(document).on('mouseout','.site_info',function(){
-    $(this).css('background', '');
+  $(document).on('mouseout','.site_info',function(){
+      $(this).css('background', '');
+  });
 });
 
 $(document).on('load','.site_info',function(){
-  
+
   let input_text = substr($('.site_title').text(),10,'…');
   let input_text_url = substr($('.site_url').text(),10,'…')
 
@@ -97,11 +91,11 @@ var init = function(dao){
 }
 
 var Dao = function(){
-  var name = 'localdb'
-  var version = '1.0'
-  var description = 'Web SQL Database'
-  var size = 5 * 1024 * 1024
-  var db = openDatabase(name, version, description, size)
+  var name = 'localdb';
+  var version = '1.0';
+  var description = 'Web SQL Database';
+  var size = 5 * 1024 * 1024;
+  var db = openDatabase(name, version, description, size);
 
   // テーブル作成
   db.transaction(function(tx){
@@ -135,13 +129,6 @@ var Dao = function(){
         });
     });
   }
-
-  this.delete = function(callback){
-    db.transaction(function (tx){
-      tx.executeSql('drop table search')
-    })
-  }
-
 }
 
 
