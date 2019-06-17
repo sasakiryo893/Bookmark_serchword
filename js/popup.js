@@ -37,6 +37,13 @@ $(function() {
             }
         });
     });
+  
+  //Enterキーを押したら検索
+  $('#Search_Word').keydown(function() {
+    if(event.keyCode==13){
+        $('#Bt_Search').trigger('click');
+    }
+  });
 
   //追加
   $('#Bt_Add').on('click',function(){
