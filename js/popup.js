@@ -29,7 +29,7 @@ $(function() {
 });
 
 $(document).on('click','.site_info',function(){
-    let url = $(this).children('.site_url').text();
+    let url = $(this).children('.hidden_url').text();
     window.open(url,'_brank');
 });
 $(document).on('mouseover','.site_info',function(){
@@ -68,21 +68,32 @@ $(document).on('load','.site_info',function(){
 $('.site_list').ready(function(){
 })
 
+String.prototype.bytes = function () {
+  return(encodeURIComponent(this).replace(/%../g,"x").length);
+}
+
 var init = function(dao){
   // TODO表の削除
   $('.site_list').empty()
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
+      if(e.name.bytes() > 36) name_short = e.name.slice(0,20)+"...";
+      else name_short = e.name;
+      if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
+      else url_short = e.url;
       $('.site_list').append(`
         <div class="site_info">
           <div class="site_title">
-            <h5>${e.name}</h5>
+            <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
             ${e.search_word}
           </div>
           <div class="site_url">
+            ${url_short}
+          </div>
+          <div class="hidden_url" style="display:none">
             ${e.url}
           </div>
         </div>
