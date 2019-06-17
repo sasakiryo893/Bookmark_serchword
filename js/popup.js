@@ -57,7 +57,7 @@ $(function () {
     $('#Bt_Add').on('click', function () {
         window.location.href = '/popupWindow.html';
         // $('.dialog').show()
-    })
+    });
 
 $(document).on('click','.site_info',function(){
     let url = $(this).children('.hidden_url').text();
@@ -97,7 +97,8 @@ $(document).on('load','.site_info',function(){
         }
         return text;
     }
-})
+});
+});
 
 String.prototype.bytes = function () {
   return(encodeURIComponent(this).replace(/%../g,"x").length);
@@ -152,7 +153,7 @@ var Dao = function () {
         memo text null
       )
     `)
-    })
+    });
     // 全件検索
 
     this.findAll = function (callback) {
