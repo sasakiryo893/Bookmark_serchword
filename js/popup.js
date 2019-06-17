@@ -16,10 +16,6 @@ $(function() {
     window.location.href = '/popupWindow.html';
   })
 
-  $('#Bt_Delete').on('click', function() {
-    dao.delete(init(dao))
-  })
-
   init(dao);
 });
 
