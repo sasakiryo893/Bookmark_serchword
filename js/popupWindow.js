@@ -42,12 +42,15 @@ $(function(){
 
   // 登録
   $('#Bt_Regi').on('click',function(){
-    var site = $('div#input_site').text()
-    var url = $('div#input_url').text()
-    var word = $('select#search_word').val()
-    var memo = $('textarea#input_memo').val()
-    dao.insert(site, url, word, memo)
-    alert("登録完了")
+    chrome.tabs.getSelected(null, function(tab){
+      var site = tab.title;
+      var url = tab.url;
+      var word = $('select#search_word').val();
+      var memo = $('textarea#input_memo').val();
+      dao.insert(site, url, word, memo);
+      alert("登録完了");
+      window.location.href = '/popup.html';
+    });
   });
 
   // topに戻る
