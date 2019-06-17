@@ -39,7 +39,8 @@ $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
 });
 
-$('.site_list').ready(function(){
+$(document).on('load','.site_info',function(){
+  alert("aaa")
   let input_text = substr($('.site_title').text(),10,'…');
   let input_text_url = substr($('.site_url').text(),10,'…')
 
@@ -62,6 +63,9 @@ $('.site_list').ready(function(){
     }
     return text;
   }
+});
+
+$('.site_list').ready(function(){
 })
 
 String.prototype.bytes = function () {
