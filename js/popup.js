@@ -22,7 +22,7 @@ $(function() {
     // $('.dialog').show()
   })
 
-  $('.delete').on('click', function() {
+  $('#Bt_Delete').on('click', function() {
     dao.delete(init(dao))
   })
 
@@ -57,21 +57,17 @@ var init = function(dao){
   dao.findAll(function(list){
     $.each(list, function(i, e){
       $('.site_list').append(`
-        <tr>
-          <td>
-            <div class="site_info">
-              <div class="site_title" style="margin-bottom:3px">
-                <h2>${e.name}</h2>
-              </div>
-              <div class="site_search_word">
-                ${e.search_word}
-              </div>
-              <div class="site_url">
-                ${e.url}
-              </div>
-            </div>
-          </td>
-        </tr>
+        <div class="site_info">
+          <div class="site_title" style="margin-bottom:3px">
+            <h2>${e.name}</h2>
+          </div>
+          <div class="site_search_word">
+            ${e.search_word}
+          </div>
+          <div class="site_url">
+            ${e.url}
+          </div>
+        </div>
         `);
       });
   });
