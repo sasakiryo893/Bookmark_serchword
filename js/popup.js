@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Copyright (c) 2012 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
@@ -69,10 +70,43 @@ $(document).on('mouseover', '.site_info', function () {
 });
 $(document).on('mouseout', '.site_info', function () {
     $(this).css('background', '');
+=======
+$(function() {
+  var dao = new Dao()
+
+  // $('#search').change(function() {
+  //    $('#bookmarks').empty();
+  //    dumpBookmarks($('#search').val());
+  // });
+  //検索ワード検索
+  $('#Bt_Search').on('click',function(){
+    alert($('#Search_Word').val() + "で検索！！！！！！！");
+    alert($('.site_info').children('.site_search_word').text());
+  });
+
+  //追加
+  $('#Bt_Add').on('click',function(){
+    window.location.href = '/popupWindow.html';
+  })
+
+  $(document).on('click','.site_info',function(){
+      let url = $(this).children('.hidden_url').text();
+      window.open(url,'_brank');
+  });
+
+  $(document).on('mouseover','.site_info',function(){
+      $(this).css('background', '#f0f8ff');
+  });
+
+  $(document).on('mouseout','.site_info',function(){
+      $(this).css('background', '');
+  });
+  init(dao);
+>>>>>>> a20faa35ca7fc94c89cc6bc8860dc897a0bbc441
 });
 
 $(document).on('load','.site_info',function(){
-  alert("aaa")
+
   let input_text = substr($('.site_title').text(),10,'…');
   let input_text_url = substr($('.site_url').text(),10,'…')
 
@@ -98,7 +132,10 @@ $(document).on('load','.site_info',function(){
         return text;
     }
 });
+<<<<<<< HEAD
 });
+=======
+>>>>>>> a20faa35ca7fc94c89cc6bc8860dc897a0bbc441
 
 String.prototype.bytes = function () {
   return(encodeURIComponent(this).replace(/%../g,"x").length);
@@ -135,12 +172,21 @@ var init = function(dao){
     });
 }
 
+<<<<<<< HEAD
 var Dao = function () {
     var name = 'localdb'
     var version = '1.0'
     var description = 'Web SQL Database'
     var size = 5 * 1024 * 1024
     var db = openDatabase(name, version, description, size)
+=======
+var Dao = function(){
+  var name = 'localdb';
+  var version = '1.0';
+  var description = 'Web SQL Database';
+  var size = 5 * 1024 * 1024;
+  var db = openDatabase(name, version, description, size);
+>>>>>>> a20faa35ca7fc94c89cc6bc8860dc897a0bbc441
 
     // テーブル作成
     db.transaction(function (tx) {
@@ -153,6 +199,7 @@ var Dao = function () {
         memo text null
       )
     `)
+<<<<<<< HEAD
     });
     // 全件検索
 
@@ -175,3 +222,149 @@ var Dao = function () {
         });
     }
 }
+=======
+  })
+  // 全件検索
+
+  this.findAll = function(callback){
+    db.transaction(function (tx){
+      tx.executeSql('select * from search order by id desc', [],
+        function (tx, results){
+          var list = []
+          for (i = 0; i < results.rows.length; i++){
+            list.push({
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              url: results.rows.item(i).url,
+              search_word: results.rows.item(i).search_word,
+              memo: results.rows.item(i).memo,
+            });
+          };
+          callback(list);
+        });
+    });
+  }
+}
+
+
+
+
+
+// Traverse the bookmark tree, and print the folder and nodes.
+// function dumpBookmarks(query) {
+//   var bookmarkTreeNodes = chrome.bookmarks.getTree(
+//     function(bookmarkTreeNodes) {
+//       $('#bookmarks').append(dumpTreeNodes(bookmarkTreeNodes, query));
+//     });
+// }
+// function dumpTreeNodes(bookmarkNodes, query) {
+//   var list = $('<ul>');
+//   var i;
+//   for (i = 0; i < bookmarkNodes.length; i++) {
+//     list.append(dumpNode(bookmarkNodes[i], query));
+//   }
+//   return list;
+// }
+// function dumpNode(bookmarkNode, query) {
+//   if (bookmarkNode.title) {
+//     if (query && !bookmarkNode.children) {
+//       if (String(bookmarkNode.title).indexOf(query) == -1) {
+//         return $('<span></span>');
+//       }
+//     }
+//     var anchor = $('<a>');
+//     anchor.attr('href', bookmarkNode.url);
+//     anchor.text(bookmarkNode.title);
+//
+//      //When clicking on a bookmark in the extension, a new tab is fired with
+//      //the bookmark url.
+//
+//     anchor.click(function() {
+//       chrome.tabs.create({url: bookmarkNode.url});
+//     });
+//     var span = $('<span>');
+//     var options = bookmarkNode.children ?
+//       $('<span>[<a href="#" id="addlink">Add</a>]</span>') :
+//       $('<span>[<a id="editlink" href="#">Edit</a> <a id="deletelink" ' +
+//         'href="#">Delete</a>]</span>');
+//     var edit = bookmarkNode.children ? $('<table><tr><td>Name</td><td>' +
+//       '<input id="title"></td></tr><tr><td>URL</td><td><input id="url">' +
+//       '</td></tr></table>') : $('<input>');
+//     // Show add and edit links when hover over.
+//         span.hover(function() {
+//         span.append(options);
+//         $('#deletelink').click(function() {
+//           $('#deletedialog').empty().dialog({
+//                  autoOpen: false,
+//                  title: 'Confirm Deletion',
+//                  resizable: false,
+//                  height: 140,
+//                  modal: true,
+//                  overlay: {
+//                    backgroundColor: '#000',
+//                    opacity: 0.5
+//                  },
+//                  buttons: {
+//                    'Yes, Delete It!': function() {
+//                       chrome.bookmarks.remove(String(bookmarkNode.id));
+//                       span.parent().remove();
+//                       $(this).dialog('destroy');
+//                     },
+//                     Cancel: function() {
+//                       $(this).dialog('destroy');
+//                     }
+//                  }
+//                }).dialog('open');
+//          });
+//         $('#addlink').click(function() {
+//           $('#adddialog').empty().append(edit).dialog({autoOpen: false,
+//             closeOnEscape: true, title: 'Add New Bookmark', modal: true,
+//             buttons: {
+//             'Add' : function() {
+//                chrome.bookmarks.create({parentId: bookmarkNode.id,
+//                  title: $('#title').val(), url: $('#url').val()});
+//                $('#bookmarks').empty();
+//                $(this).dialog('destroy');
+//                window.dumpBookmarks();
+//              },
+//             'Cancel': function() {
+//                $(this).dialog('destroy');
+//             }
+//           }}).dialog('open');
+//         });
+//         $('#editlink').click(function() {
+//          edit.val(anchor.text());
+//          $('#editdialog').empty().append(edit).dialog({autoOpen: false,
+//            closeOnEscape: true, title: 'Edit Title', modal: true,
+//            show: 'slide', buttons: {
+//               'Save': function() {
+//                  chrome.bookmarks.update(String(bookmarkNode.id), {
+//                    title: edit.val()
+//                  });
+//                  anchor.text(edit.val());
+//                  options.show();
+//                  $(this).dialog('destroy');
+//               },
+//              'Cancel': function() {
+//                  $(this).dialog('destroy');
+//              }
+//          }}).dialog('open');
+//         });
+//         options.fadeIn();
+//       },
+//       // unhover
+//       function() {
+//         options.remove();
+//       }).append(anchor);
+//   }
+//   var li = $(bookmarkNode.title ? '<li>' : '<div>').append(span);
+//   if (bookmarkNode.children && bookmarkNode.children.length > 0) {
+//     li.append(dumpTreeNodes(bookmarkNode.children, query));
+//   }
+//   return li;
+// }
+
+// document.addEventListener('DOMContentLoaded', function () {
+//   dumpBookmarks();
+// });
+>>>>>>> a20faa35ca7fc94c89cc6bc8860dc897a0bbc441

@@ -2,7 +2,6 @@ $(function(){
   var dao = new Dao()
   // サイト名、URLを取得
   chrome.tabs.getSelected(null, function(tab) {
-
     //バイト数が35バイト以上なら3点リーダをつける
     function substr(text, len, truncation) {
       if (truncation === undefined) { truncation = '…'; }
