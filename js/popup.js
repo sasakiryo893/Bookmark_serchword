@@ -1,10 +1,10 @@
 $(function() {
   var dao = new Dao()
 
-  $('#search').change(function() {
-     $('#bookmarks').empty();
-     dumpBookmarks($('#search').val());
-  });
+  // $('#search').change(function() {
+  //    $('#bookmarks').empty();
+  //    dumpBookmarks($('#search').val());
+  // });
   //検索ワード検索
   $('#Bt_Search').on('click',function(){
     alert($('#Search_Word').val() + "で検索！！！！！！！");
@@ -28,6 +28,7 @@ $(function() {
   $(document).on('mouseout','.site_info',function(){
       $(this).css('background', '');
   });
+  init(dao);
 });
 
 $(document).on('load','.site_info',function(){
