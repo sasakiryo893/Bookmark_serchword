@@ -5,6 +5,7 @@ $(function() {
      $('#bookmarks').empty();
      dumpBookmarks($('#search').val());
   });
+
   //検索ワード検索
   $('#Bt_Search').on('click',function(){
     alert($('#Search_Word').val() + "で検索！！！！！！！");
@@ -19,6 +20,23 @@ $(function() {
   init(dao);
 });
 
+function substr(text, len, truncation) {
+  if (truncation === undefined) { truncation = '…'; }
+  var text_array = text.split('');
+  var count = 0;
+  var str = '';
+  for (i = 0; i < text_array.length; i++) {
+    var n = escape(text_array[i]);
+    if (n.length < 4) count++;
+    else count += 2;
+    if (count > len) {
+      return str + truncation;
+    }
+    str += text.charAt(i);
+  }
+  return text;
+}
+
 $(document).on('click','.site_info',function(){
     let url = $(this).children('.hidden_url').text();
     window.open(url,'_brank');
@@ -32,32 +50,6 @@ $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
 });
 
-$(document).on('load','.site_info',function(){
-
-  let input_text = substr($('.site_title').text(),10,'…');
-  let input_text_url = substr($('.site_url').text(),10,'…')
-
-  $('.site_title').html(input_text);
-  $('.site_url').html(input_text_url);
-
-  function substr(text, len, truncation) {
-    if (truncation === undefined) { truncation = '…'; }
-    var text_array = text.split('');
-    var count = 0;
-    var str = '';
-    for (i = 0; i < text_array.length; i++) {
-      var n = escape(text_array[i]);
-      if (n.length < 4) count++;
-      else count += 2;
-      if (count > len) {
-        return str + truncation;
-      }
-      str += text.charAt(i);
-    }
-    return text;
-  }
-});
-
 String.prototype.bytes = function () {
   return(encodeURIComponent(this).replace(/%../g,"x").length);
 }
@@ -68,10 +60,8 @@ var init = function(dao){
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
-      if(e.name.bytes() > 36) name_short = e.name.slice(0,20)+"...";
-      else name_short = e.name;
-      if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
-      else url_short = e.url;
+      name_short = substr(e.name, 24, '…');
+      url_short = substr(e.url, 40, '…');
       $('.site_list').append(`
         <div class="site_info">
           <div class="site_title">
