@@ -22,12 +22,6 @@ $(function() {
     // $('.dialog').show()
   })
 
-  $('#Bt_Delete').on('click', function() {
-    dao.delete(init(dao))
-  })
-  init(dao);
-});
-
 $(document).on('click','.site_info',function(){
     let url = $(this).children('.hidden_url').text();
     window.open(url,'_brank');
@@ -140,12 +134,6 @@ var Dao = function(){
           callback(list);
         });
     });
-  }
-
-  this.delete = function(callback){
-    db.transaction(function (tx){
-      tx.executeSql('drop table search')
-    })
   }
 
 }
