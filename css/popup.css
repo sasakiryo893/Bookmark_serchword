@@ -1,5 +1,5 @@
 .site_info{
-  margin-bottom: 7px;
+  padding: 5px;
 }
 
 ul {
@@ -9,20 +9,3 @@ ul {
 .hidden {
   display: none
 }
-
-input[type="search"] {
-  -webkit-appearance: searchfield;
-}
-input[type="search"]::-webkit-search-cancel-button {
-  -webkit-appearance: searchfield-cancel-button;
-}
-
-p {
-  margin: 0px;
-  padding-left: 20px;
-}
-
-h5 {
-  margin-bottom: 0px;
-}
-

@@ -38,13 +38,6 @@ $(function() {
             }
         });
     });
-  
-  //Enterキーを押したら検索
-  $('#Search_Word').keydown(function() {
-    if(event.keyCode==13){
-        $('#Bt_Search').trigger('click');
-    }
-  });
 
   //追加
   $('#Bt_Add').on('click',function(){
@@ -82,7 +75,6 @@ function substr(text, len, truncation) {
   }
   return text;
 }
-
 
 $(document).on('click','.site_info',function(){
     let url = $(this).children('.hidden_url').text();
@@ -123,10 +115,6 @@ var init = function(dao){
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
-      if(e.name.bytes() > 36) name_short = e.name.slice(0,20)+"...";
-      else name_short = e.name;
-      if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
-      else url_short = e.url;
       name_short = substr(e.name, 24, '…');
       url_short = substr(e.url, 40, '…');
       $('.site_list').append(`
@@ -135,10 +123,12 @@ var init = function(dao){
             <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
-            <p>${e.search_word}</p>
+            <p>
+                ${e.search_word}
+            </p>
           </div>
           <div class="site_url">
-            <p>${url_short}</p>
+            ${url_short}
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}
@@ -153,9 +143,8 @@ var init = function(dao){
             ${e.memo}
           </div>
         </div>
-      `);
-        
-    });
+        `);
+      });
   });
 }
 
