@@ -105,12 +105,12 @@ var init = function(dao){
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
-      if(e.name.bytes() > 36) name_short = e.name.slice(0,20)+"...";
-      else name_short = e.name;
-      if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
-      else url_short = e.url;
+
       name_short = substr(e.name, 24, '…');
       url_short = substr(e.url, 40, '…');
+      if(e.search_word == "") search_word = "<br>"
+      else search_word = e.search_word
+
       $('.site_list').append(`
         <div class="site_info">
           <div class="site_title">
@@ -118,7 +118,7 @@ var init = function(dao){
           </div>
           <div class="site_search_word">
             <img src="sources/search_word.png" alt="" class="glass">
-            <p>${e.search_word}</p>
+            <p>${search_word}</p>
           </div>
           <div class="site_url">
             <p>${url_short}</p>
