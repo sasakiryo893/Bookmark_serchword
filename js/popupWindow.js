@@ -36,8 +36,6 @@ $(function(){
   function (results) {
     for(var i = 0; i < results.length; i++) {
       $('#search_word').append($('<option>').html(results[i].title.replace('- Google 検索', '')).val(results[i].title.replace('- Google 検索', '')));
-
-      $('#search_word').append($('<option>').html(results[i].title.replace('- Google 検索', '')).val(results[i].title.replace('- Google 検索', '')));
     };
   });
 
