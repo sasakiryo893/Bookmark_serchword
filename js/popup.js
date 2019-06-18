@@ -43,45 +43,42 @@ $(function() {
     window.location.href = '/popupWindow.html';
   })
 
+  init(dao);
+});
+
+function substr(text, len, truncation) {
+  if (truncation === undefined) { truncation = '…'; }
+  var text_array = text.split('');
+  var count = 0;
+  var str = '';
+  for (i = 0; i < text_array.length; i++) {
+    var n = escape(text_array[i]);
+    if (n.length < 4) count++;
+    else count += 2;
+    if (count > len) {
+      return str + truncation;
+    }
+    str += text.charAt(i);
+  }
+  return text;
+}
+
 $(document).on('click','.site_info',function(){
     let url = $(this).children('.hidden_url').text();
     window.open(url,'_brank');
 });
 
-  $(document).on('mouseover','.site_info',function(){
-      $(this).css('background', '#f0f8ff');
-  });
-
-  $(document).on('mouseout','.site_info',function(){
-      $(this).css('background', '');
-  });
-  init(dao);
+$(document).on('mouseover','.site_info',function(){
+    $(this).css('background', '#f0f8ff');
 });
 
-$(document).on('load','.site_info',function(){
+$(document).on('mouseout','.site_info',function(){
+    $(this).css('background', '');
+});
 
-  let input_text = substr($('.site_title').text(),10,'…');
-  let input_text_url = substr($('.site_url').text(),10,'…')
-
-  $('.site_title').html(input_text);
-  $('.site_url').html(input_text_url);
-
-  function substr(text, len, truncation) {
-    if (truncation === undefined) { truncation = '…'; }
-    var text_array = text.split('');
-    var count = 0;
-    var str = '';
-    for (i = 0; i < text_array.length; i++) {
-      var n = escape(text_array[i]);
-      if (n.length < 4) count++;
-      else count += 2;
-      if (count > len) {
-        return str + truncation;
-      }
-      str += text.charAt(i);
-    }
-    return text;
-  }
+$(document).on('contextmenu','.site_info',function(){
+  //alert($(this).children('.hidden_id').text());
+  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text() + "?site=" + $(this).children('.hidden_name').text()  + "?url=" + $(this).children('.hidden_url').text() + "?memo=" + $(this).children('.hidden_memo').text();
 });
 
 String.prototype.bytes = function () {
@@ -94,10 +91,8 @@ var init = function(dao){
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
-      if(e.name.bytes() > 36) name_short = e.name.slice(0,20)+"...";
-      else name_short = e.name;
-      if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
-      else url_short = e.url;
+      name_short = substr(e.name, 24, '…');
+      url_short = substr(e.url, 40, '…');
       $('.site_list').append(`
         <div class="site_info">
           <div class="site_title">
@@ -113,6 +108,15 @@ var init = function(dao){
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}
+          </div>
+          <div class="hidden_id" style="display:none">
+            ${e.id}
+          </div>
+          <div class="hidden_name" style="display:none">
+            ${e.name}
+          </div>
+          <div class="hidden_memo" style="display:none">
+            ${e.memo}
           </div>
         </div>
         `);
