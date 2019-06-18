@@ -20,8 +20,13 @@ $(function(){
       return text;
     }
 
+<<<<<<< HEAD
     let input_text = substr(tab.title,34,'…');
     let input_text_url = substr(tab.url,37,'…');
+=======
+    let input_text = substr(tab.title,30,'…');
+    let input_text_url = substr(tab.url,34,'…');
+>>>>>>> 859d684def3710ee27c5eb3b84fb136f7a395a2a
 
     $('#input_site').html(input_text);
     $('#input_url').html(input_text_url);
