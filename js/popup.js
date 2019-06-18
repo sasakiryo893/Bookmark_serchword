@@ -77,7 +77,7 @@ $(document).on('mouseover','.site_info',function(){
     var text =$(this).children('.hidden_memo').text();
     var option =
     (`
-      <span id='site_memo'>
+      <span id='hidden_memo'>
         ${text}
       </span>
     `);
@@ -105,17 +105,19 @@ var init = function(dao){
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
+      if(e.name.bytes() > 36) name_short = e.name.slice(0,20)+"...";
+      else name_short = e.name;
+      if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
+      else url_short = e.url;
       name_short = substr(e.name, 28, '…');
-      url_short = substr(e.url, 38, '…');
+      url_short = substr(e.url, 40, '…');
       $('.site_list').append(`
         <div class="site_info">
           <div class="site_title">
             <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
-            <p>
-                ${e.search_word}
-            </p>
+            <p>${e.search_word}</p>
           </div>
           <div class="site_url">
             <p>${url_short}</p>
@@ -134,7 +136,6 @@ var init = function(dao){
           </div>
         </div>
       `);
-      $('.site_list').append(site_info);
 
     });
   });
