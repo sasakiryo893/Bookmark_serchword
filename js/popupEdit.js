@@ -21,9 +21,11 @@ $(function(){
       return text;
     }
 
+    let input_text = substr(getParam(1),36,'…');
     let input_text_url = substr(getParam(2),34,'…');
-    $('#input_url').html(input_text_url);
 
+    $('#input_site').html(input_text);
+    $('#input_url').html(input_text_url);
   });
 
   // 編集登録
@@ -41,6 +43,7 @@ $(function(){
   //削除
   $('#Bt_Remove').on('click',function(){
     const idx = getParam(0);
+    //alert(idx)
     dao.remove(idx);
     window.location.href = '/popup.html';
   })
@@ -82,6 +85,7 @@ function getParam(i){
   params = parameters[5].split("=")
   decodeWord = params[1]
   word = decodeURI(decodeWord)
+  //alert(memo)
 
   var list = [id, name, url, memo, word]
 
