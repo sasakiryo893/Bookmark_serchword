@@ -22,7 +22,7 @@ $(function(){
     }
 
     let input_text = substr(getParam(1),36,'…');
-    let input_text_url = substr(getParam(2),38,'…');
+    let input_text_url = substr(getParam(2),34,'…');
 
     $('#input_site').html(input_text);
     $('#input_url').html(input_text_url);

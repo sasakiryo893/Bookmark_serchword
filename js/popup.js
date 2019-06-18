@@ -111,7 +111,7 @@ var init = function(dao){
     $.each(list, function(i, e){
 
       name_short = substr(e.name, 24, '…');
-      url_short = substr(e.url, 40, '…');
+      url_short = substr(e.url, 38, '…');
       if(e.search_word == "") search_word = "<br>"
       else search_word = e.search_word
       $('.site_list').append(`
