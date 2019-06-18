@@ -39,6 +39,14 @@ $(function() {
         });
     });
 
+  //Enterキーを押したら検索
+  $('#Search_Word').keydown(function() {
+    if(event.keyCode==13){
+        $('#Bt_Search').trigger('click');
+    }
+  });
+
+
   //追加
   $('#Bt_Add').on('click',function(){
     window.location.href = '/popupWindow.html';
@@ -79,7 +87,7 @@ function substr(text, len, truncation) {
 
 $(document).on('contextmenu','.site_info',function(){
   //alert($(this).children('.hidden_id').text());
-  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text() + "?site=" + $(this).children('.hidden_name').text()  + "?url=" + $(this).children('.hidden_url').text() + "?memo=" + $(this).children('.hidden_memo').text();
+  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text() + "?site=" + $(this).children('.hidden_name').text() + "?url=" + $(this).children('.hidden_url').text() + "?memo=" + $(this).children('.hidden_memo').text()+ "?word=" + $(this).children('.hidden_word').text();
 });
 
 String.prototype.bytes = function () {
@@ -115,6 +123,9 @@ var init = function(dao){
           </div>
           <div class="hidden_name" style="display:none">
             ${e.name}
+          </div>
+          <div class="hidden_word" style="display:none">
+            ${e.search_word}
           </div>
           <div class="hidden_memo" style="display:none">
             ${e.memo}
