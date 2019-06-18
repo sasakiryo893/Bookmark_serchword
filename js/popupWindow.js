@@ -1,5 +1,5 @@
 $(function(){
-  var dao = new Dao()
+  var dao = new Dao();
   // サイト名、URLを取得
   chrome.tabs.getSelected(null, function(tab) {
     //バイト数が35バイト以上なら3点リーダをつける
@@ -46,8 +46,9 @@ $(function(){
       var url = tab.url;
       var word = $('select#search_word').val();
       var memo = $('textarea#input_memo').val().trim();
-      dao.insert(site, url, word, memo);
-      window.location.href = '/popup.html';
+      dao.insert(site, url, word, memo, function() {
+        window.location.href = '/popup.html';
+      });
     });
   });
 
@@ -63,17 +64,18 @@ $(function(){
 });
 
 var Dao = function(){
-  var name = 'localdb'
-  var version = '1.0'
-  var description = 'Web SQL Database'
-  var size = 5 * 1024 * 1024
-  var db = openDatabase(name, version, description, size)
+  var name = 'localdb';
+  var version = '1.0';
+  var description = 'Web SQL Database';
+  var size = 5 * 1024 * 1024;
+  var db = openDatabase(name, version, description, size);
 
   // 登録
-  this.insert = function(site, url, word, memo){
+  this.insert = function(site, url, word, memo, callback){
     db.transaction(function (tx){
-      tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo])
-    })
+      tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+      callback();
+    });
   }
 
 }

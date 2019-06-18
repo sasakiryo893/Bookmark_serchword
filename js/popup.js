@@ -91,7 +91,6 @@ $(document).on('mouseout','.site_info',function(){
 });
 
 $(document).on('contextmenu','.site_info',function(){
-  //alert($(this).children('.hidden_id').text());
   window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text().trim()
                                            + "?site=" + $(this).children('.hidden_name').text().trim()
                                            + "?url=" + $(this).children('.hidden_url').text().trim()
