@@ -37,7 +37,7 @@ $(function() {
             }
         });
     });
-  
+
   //Enterキーを押したら検索
   $('#Search_Word').keydown(function() {
     if(event.keyCode==13){
@@ -98,8 +98,8 @@ var init = function(dao){
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
-      name_short = substr(e.name, 24, '…');
-      url_short = substr(e.url, 40, '…');
+      name_short = substr(e.name, 28, '…');
+      url_short = substr(e.url, 38, '…');
       $('.site_list').append(`
         <div class="site_info">
           <div class="site_title">
