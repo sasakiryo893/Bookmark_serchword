@@ -36,6 +36,8 @@ $(function(){
   function (results) {
     for(var i = 0; i < results.length; i++) {
       $('#search_word').append($('<option>').html(results[i].title.replace('- Google 検索', '')).val(results[i].title.replace('- Google 検索', '')));
+
+      $('#search_word').append($('<option>').html(results[i].title.replace('- Google 検索', '')).val(results[i].title.replace('- Google 検索', '')));
     };
   });
 
@@ -45,7 +47,7 @@ $(function(){
       var site = tab.title;
       var url = tab.url;
       var word = $('select#search_word').val();
-      var memo = $('textarea#input_memo').val();
+      var memo = $('textarea#input_memo').val().trim();
       dao.insert(site, url, word, memo);
       alert("登録完了");
       window.location.href = '/popup.html';

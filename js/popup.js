@@ -92,7 +92,11 @@ $(document).on('mouseout','.site_info',function(){
 
 $(document).on('contextmenu','.site_info',function(){
   //alert($(this).children('.hidden_id').text());
-  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text() + "?site=" + $(this).children('.hidden_name').text() + "?url=" + $(this).children('.hidden_url').text() + "?memo=" + $(this).children('.hidden_memo').text()+ "?word=" + $(this).children('.hidden_word').text();
+  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text().trim()
+                                           + "?site=" + $(this).children('.hidden_name').text().trim()
+                                           + "?url=" + $(this).children('.hidden_url').text().trim()
+                                           + "?memo=" + $(this).children('.hidden_memo').text().trim()
+                                           + "?word=" + $(this).children('.hidden_word').text().trim();
 });
 
 String.prototype.bytes = function () {
@@ -110,7 +114,6 @@ var init = function(dao){
       url_short = substr(e.url, 40, '…');
       if(e.search_word == "") search_word = "<br>"
       else search_word = e.search_word
-
       $('.site_list').append(`
         <div class="site_info">
           <div class="site_title">

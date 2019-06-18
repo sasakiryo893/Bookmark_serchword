@@ -31,10 +31,10 @@ $(function(){
   // 編集登録
   $('#Bt_Edit').on('click',function(){
       var id = getParam(0);
-      var site = $('#input_site').val();;
-      var url = getParam(2);
-      var word = $('input#search_word').val();
-      var memo = $('textarea#input_memo').val();
+      var site = $('#input_site').val().trim();
+      var url = getParam(2).trim();
+      var word = $('input#search_word').val().trim();
+      var memo = $('textarea#input_memo').val().trim();
       dao.update(id, site, url, word, memo);
       alert("編集完了");
       window.location.href = '/popup.html';
@@ -69,21 +69,21 @@ function getParam(i){
   parameters    = url.split("?")
   //id取得
   params   = parameters[1].split("=")
-  id = params[1].replace(/%20/g, '')
+  id = params[1]
   //サイト名取得
   params = parameters[2].split("=")
-  siteName = params[1].replace(/%20+/g, '')
+  siteName = params[1]
   name = decodeURI(siteName)
   //URL取得
   params = parameters[3].split("=")
-  url = params[1].replace(/%20/g, '')
+  url = params[1]
   //メモ取得
   params = parameters[4].split("=")
-  decodeMemo = params[1].replace(/%20/g, '')
+  decodeMemo = params[1]
   memo = decodeURI(decodeMemo)
   //検索ワード取得
   params = parameters[5].split("=")
-  decodeWord = params[1].replace(/%20/g, '')
+  decodeWord = params[1]
   word = decodeURI(decodeWord)
   //alert(memo)
 
@@ -105,26 +105,6 @@ var Dao = function(){
       tx.executeSql('update search SET name=?, url=?, search_word=?, memo=? WHERE id=?', [site, url, word, memo,id])
     })
   }
-
-
-  //選択
-  this.select = function(id, callback) {
-    db.transaction(function (tx){
-      tx.executeSql('select * from search where id = ?', [id],
-        function(tx, result) {
-          var list = []
-          list.push({
-            id: result.rows.item(0).id,
-            name: result.rows.item(0).name,
-            url: result.rows.item(0).url,
-            search_word: result.rows.item(0).search_word,
-            memo: result.rows.item(0).memo,
-          })
-          callback(list[0])
-        })
-    })
-  }
-
 
   // 削除
   this.remove = function(id){
