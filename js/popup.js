@@ -166,8 +166,8 @@ var Dao = function(){
       )
     `)
   })
+  
   // 全件検索
-
   this.findAll = function(callback){
     db.transaction(function (tx){
       tx.executeSql('select * from search order by id desc', [],
