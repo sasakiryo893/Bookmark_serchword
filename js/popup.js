@@ -117,6 +117,7 @@ var init = function(dao){
             <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
+            <img src="sources/search_word.png" alt="" class="glass">
             <p>${e.search_word}</p>
           </div>
           <div class="site_url">
