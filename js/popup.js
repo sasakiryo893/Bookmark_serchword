@@ -1,10 +1,11 @@
 $(function() {
   var dao = new Dao()
 
-  // $('#search').change(function() {
-  //    $('#bookmarks').empty();
-  //    dumpBookmarks($('#search').val());
-  // });
+  $('#search').change(function() {
+     $('#bookmarks').empty();
+     dumpBookmarks($('#search').val());
+  });
+
   //検索ワード検索
     $('#Bt_Search').on('click', function () {
         var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
@@ -49,6 +50,18 @@ $(function() {
   $('#Bt_Add').on('click',function(){
     window.location.href = '/popupWindow.html';
   })
+  $(document).on('click','.site_info',function(){
+    let url = $(this).children('.hidden_url').text();
+    window.open(url,'_brank');
+  });
+
+  $(document).on('mouseover','.site_info',function(){
+    $(this).css('background', '#f0f8ff');
+  });
+
+  $(document).on('mouseout','.site_info',function(){
+    $(this).css('background', '');
+  });
 
   init(dao);
 });
@@ -69,6 +82,7 @@ function substr(text, len, truncation) {
   }
   return text;
 }
+
 
 $(document).on('click','.site_info',function(){
     let url = $(this).children('.hidden_url').text();
