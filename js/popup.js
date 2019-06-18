@@ -115,7 +115,7 @@ var init = function(dao){
       if(e.search_word == "") search_word = "<br>"
       else search_word = e.search_word
       $('.site_list').append(`
-        <div class="site_info">
+        <div class="site_info choice">
           <div class="site_title">
             <h5>${name_short}</h5>
           </div>
