@@ -41,10 +41,23 @@ $(function() {
     }
   });
 
+
   //追加
   $('#Bt_Add').on('click',function(){
     window.location.href = '/popupWindow.html';
   })
+  $(document).on('click','.site_info',function(){
+    let url = $(this).children('.hidden_url').text();
+    window.open(url,'_brank');
+  });
+
+  $(document).on('mouseover','.site_info',function(){
+    $(this).css('background', '#f0f8ff');
+  });
+
+  $(document).on('mouseout','.site_info',function(){
+    $(this).css('background', '');
+  });
 
   init(dao);
 });
@@ -92,7 +105,7 @@ $(document).on('mouseout','.site_info',function(){
 
 $(document).on('contextmenu','.site_info',function(){
   //alert($(this).children('.hidden_id').text());
-  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text() + "?site=" + $(this).children('.hidden_name').text()  + "?url=" + $(this).children('.hidden_url').text() + "?memo=" + $(this).children('.hidden_memo').text();
+  window.location.href = '/popupEdit.html' + "?id=" +  $(this).children('.hidden_id').text() + "?site=" + $(this).children('.hidden_name').text() + "?url=" + $(this).children('.hidden_url').text() + "?memo=" + $(this).children('.hidden_memo').text()+ "?word=" + $(this).children('.hidden_word').text();
 });
 
 String.prototype.bytes = function () {
@@ -117,10 +130,12 @@ var init = function(dao){
             <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
-            <p>${e.search_word}</p>
+            <p>
+                ${e.search_word}
+            </p>
           </div>
           <div class="site_url">
-            <p>${url_short}</p>
+            ${url_short}
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}
@@ -130,6 +145,9 @@ var init = function(dao){
           </div>
           <div class="hidden_name" style="display:none">
             ${e.name}
+          </div>
+          <div class="hidden_word" style="display:none">
+            ${e.search_word}
           </div>
           <div class="hidden_memo" style="display:none">
             ${e.memo}
