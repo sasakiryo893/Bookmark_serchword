@@ -20,10 +20,8 @@ $(function(){
       return text;
     }
 
-
     let input_text = substr(tab.title,30,'…');
     let input_text_url = substr(tab.url,34,'…');
-
 
     $('#input_site').html(input_text);
     $('#input_url').html(input_text_url);
