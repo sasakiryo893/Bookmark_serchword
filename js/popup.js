@@ -119,7 +119,7 @@ var init = function(dao){
             <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
-            <img src="sources/search_word.png" alt="" class="glass">
+            <img src="resources/search_word.png" alt="" class="glass">
             <p>${search_word}</p>
           </div>
           <div class="site_url">
@@ -166,7 +166,7 @@ var Dao = function(){
       )
     `)
   })
-  
+
   // 全件検索
   this.findAll = function(callback){
     db.transaction(function (tx){
