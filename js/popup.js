@@ -79,14 +79,14 @@ $(document).on('mouseover','.site_info',function(){
     $(this).css('background', '#f0f8ff');
 
     var text =$(this).children('.hidden_memo').text();
-    var option = 
+    var option =
     (`
       <span id='hidden_memo'>
         ${text}
       </span>
     `);
     $(this).append(option);
-    
+
 });
 
 $(document).on('mouseout','.site_info',function(){
@@ -121,6 +121,7 @@ var init = function(dao){
             <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
+            <img src="sources/search_word.png" alt="" class="glass">
             <p>${e.search_word}</p>
           </div>
           <div class="site_url">
@@ -143,7 +144,7 @@ var init = function(dao){
           </div>
         </div>
       `);
-        
+
     });
   });
 }

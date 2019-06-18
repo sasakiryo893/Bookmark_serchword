@@ -9,3 +9,11 @@ ul {
 .hidden {
   display: none
 }
+
+img.glass {
+  margin-top: 6px;
+  margin-right: 4px;
+  float: left;
+  width: 12px;
+  height: 12px;
+}
