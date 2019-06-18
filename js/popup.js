@@ -34,9 +34,20 @@ $(document).on('click','.site_info',function(){
 });
 $(document).on('mouseover','.site_info',function(){
     $(this).css('background', '#f0f8ff');
+
+    var text =$(this).children('.site_memo').text();
+    var option = 
+    (`
+      <span id='site_memo'>
+        ${text}
+      </span>
+    `);
+    $(this).append(option);
+    
 });
 $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
+    $(this).find('span:last').remove();
 });
 
 $('.site_list').ready(function(){
@@ -78,7 +89,9 @@ var init = function(dao){
       else name_short = e.name;
       if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
       else url_short = e.url;
-      $('.site_list').append(`
+    
+      var site_info = 
+      (`
         <div class="site_info">
           <div class="site_title">
             <h5>${name_short}</h5>
@@ -92,9 +105,14 @@ var init = function(dao){
           <div class="hidden_url" style="display:none">
             ${e.url}
           </div>
+          <div class="site_memo" style="display:none">
+            ${e.memo}
+          </div>
         </div>
-        `);
-      });
+      `);
+      $('.site_list').append(site_info);
+        
+    });
   });
 }
 
