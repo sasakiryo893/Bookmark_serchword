@@ -1,8 +1,3 @@
-// Copyright (c) 2012 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// Search the bookmarks when entering the search keyword.
 $(function() {
   var dao = new Dao()
 
@@ -19,12 +14,8 @@ $(function() {
   //追加
   $('#Bt_Add').on('click',function(){
     window.location.href = '/popupWindow.html';
-    // $('.dialog').show()
   })
 
-  $('#Bt_Delete').on('click', function() {
-    dao.delete(init(dao))
-  })
   init(dao);
 });
 
@@ -32,6 +23,7 @@ $(document).on('click','.site_info',function(){
     let url = $(this).children('.hidden_url').text();
     window.open(url,'_brank');
 });
+
 $(document).on('mouseover','.site_info',function(){
     $(this).css('background', '#f0f8ff');
 
@@ -45,12 +37,14 @@ $(document).on('mouseover','.site_info',function(){
     $(this).append(option);
     
 });
+
 $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
     $(this).find('span:last').remove();
 });
 
-$('.site_list').ready(function(){
+$(document).on('load','.site_info',function(){
+
   let input_text = substr($('.site_title').text(),10,'…');
   let input_text_url = substr($('.site_url').text(),10,'…')
 
@@ -73,7 +67,7 @@ $('.site_list').ready(function(){
     }
     return text;
   }
-})
+});
 
 String.prototype.bytes = function () {
   return(encodeURIComponent(this).replace(/%../g,"x").length);
@@ -139,7 +133,7 @@ var Dao = function(){
 
   this.findAll = function(callback){
     db.transaction(function (tx){
-      tx.executeSql('select * from search', [],
+      tx.executeSql('select * from search order by id desc', [],
         function (tx, results){
           var list = []
           for (i = 0; i < results.rows.length; i++){
@@ -154,12 +148,6 @@ var Dao = function(){
           callback(list);
         });
     });
-  }
-
-  this.delete = function(callback){
-    db.transaction(function (tx){
-      tx.executeSql('drop table search')
-    })
   }
 
 }
