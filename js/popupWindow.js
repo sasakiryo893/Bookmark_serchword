@@ -63,8 +63,6 @@ $(function(){
   })
 });
 
-
-
 var Dao = function(){
   var name = 'localdb'
   var version = '1.0'
