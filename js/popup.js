@@ -1,10 +1,6 @@
 $(function() {
   var dao = new Dao()
 
-  // $('#search').change(function() {
-  //    $('#bookmarks').empty();
-  //    dumpBookmarks($('#search').val());
-  // });
   //検索ワード検索
     $('#Bt_Search').on('click', function () {
         var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
@@ -77,10 +73,21 @@ $(document).on('click','.site_info',function(){
 
 $(document).on('mouseover','.site_info',function(){
     $(this).css('background', '#f0f8ff');
+
+    var text =$(this).children('.hidden_memo').text();
+    var option =
+    (`
+      <span id='site_memo'>
+        ${text}
+      </span>
+    `);
+    $(this).append(option);
+
 });
 
 $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
+    $(this).find('span:last').remove();
 });
 
 $(document).on('contextmenu','.site_info',function(){
@@ -126,8 +133,10 @@ var init = function(dao){
             ${e.memo}
           </div>
         </div>
-        `);
-      });
+      `);
+      $('.site_list').append(site_info);
+
+    });
   });
 }
 
