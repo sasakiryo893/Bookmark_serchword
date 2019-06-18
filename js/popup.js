@@ -41,23 +41,10 @@ $(function() {
     }
   });
 
-
   //追加
   $('#Bt_Add').on('click',function(){
     window.location.href = '/popupWindow.html';
   })
-  $(document).on('click','.site_info',function(){
-    let url = $(this).children('.hidden_url').text();
-    window.open(url,'_brank');
-  });
-
-  $(document).on('mouseover','.site_info',function(){
-    $(this).css('background', '#f0f8ff');
-  });
-
-  $(document).on('mouseout','.site_info',function(){
-    $(this).css('background', '');
-  });
 
   init(dao);
 });
@@ -122,7 +109,7 @@ var init = function(dao){
       else name_short = e.name;
       if(e.url.bytes() > 38) url_short = e.url.slice(0,40)+"...";
       else url_short = e.url;
-      name_short = substr(e.name, 28, '…');
+      name_short = substr(e.name, 24, '…');
       url_short = substr(e.url, 40, '…');
       $('.site_list').append(`
         <div class="site_info">
@@ -130,12 +117,10 @@ var init = function(dao){
             <h5>${name_short}</h5>
           </div>
           <div class="site_search_word">
-            <p>
-                ${e.search_word}
-            </p>
+            <p>${e.search_word}</p>
           </div>
           <div class="site_url">
-            ${url_short}
+            <p>${url_short}</p>
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}
