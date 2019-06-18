@@ -47,7 +47,6 @@ $(function(){
       var word = $('select#search_word').val();
       var memo = $('textarea#input_memo').val().trim();
       dao.insert(site, url, word, memo);
-      alert("登録完了");
       window.location.href = '/popup.html';
     });
   });
