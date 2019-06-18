@@ -21,22 +21,11 @@ $(function(){
       return text;
     }
 
-    let input_text = substr(tab.title,36,'…');
-    let input_text_url = substr(tab.url,38,'…');
+    let input_text = substr(getParam(1),36,'…');
+    let input_text_url = substr(getParam(2),38,'…');
 
     $('#input_site').html(input_text);
     $('#input_url').html(input_text_url);
-  });
-
-  // 最近の検索ワード10件を取得してプルダウンメニューに挿入
-  chrome.history.search({
-    text: '- Google 検索',
-    maxResults: 30
-  },
-  function (results) {
-    for(var i = 0; i < results.length; i++) {
-      $('#search_word').append($('<option>').html(results[i].title.replace('- Google 検索', '')).val(results[i].title.replace('- Google 検索', '')));
-    };
   });
 
   // 編集登録
@@ -44,13 +33,14 @@ $(function(){
       var id = getParam(0);
       var site = $('#input_site').val();;
       var url = getParam(2);
-      var word = $('select#search_word').val();
+      var word = $('input#search_word').val();
       var memo = $('textarea#input_memo').val();
       dao.update(id, site, url, word, memo);
       alert("編集完了");
       window.location.href = '/popup.html';
   });
 
+  //削除
   $('#Bt_Remove').on('click',function(){
     const idx = getParam(0);
     //alert(idx)
@@ -70,6 +60,7 @@ $(function(){
 
   $('#input_site').val(getParam(1))
   $('.memo').val(getParam(3))
+  $('#search_word').val(getParam(4));
 });
 
 
@@ -81,17 +72,22 @@ function getParam(i){
   id = params[1].replace(/%20/g, '')
   //サイト名取得
   params = parameters[2].split("=")
-  siteName = params[0].replace(/%20+/g, '')
+  siteName = params[1].replace(/%20+/g, '')
   name = decodeURI(siteName)
   //URL取得
   params = parameters[3].split("=")
-  url = params[0].replace(/%20/g, '')
+  url = params[1].replace(/%20/g, '')
   //メモ取得
   params = parameters[4].split("=")
-  memo = params[0].replace(/%20/g, '')
+  decodeMemo = params[1].replace(/%20/g, '')
+  memo = decodeURI(decodeMemo)
+  //検索ワード取得
+  params = parameters[5].split("=")
+  decodeWord = params[1].replace(/%20/g, '')
+  word = decodeURI(decodeWord)
   //alert(memo)
 
-  var list = [id, name, url, memo]
+  var list = [id, name, url, memo, word]
 
   return list[i]
 }
