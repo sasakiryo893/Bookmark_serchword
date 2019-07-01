@@ -170,7 +170,7 @@ var init = function(dao){
             <img src="resources/search_word.png" alt="" class="glass">
             <div class="container-fluid mx-0">
                 <div class="form-group row">
-                   <input class="form-control border border-info rounded text-secondary col-10 input-sm" type="text" value=${search_word}>
+                   <p class="form-control border border-info col-10 input-sm" type="text">${search_word}</p>
                     <button type="button" class="btn btn-info col copy-btn" data-toggle="tooltip" data-placement="top" title="コピーする">
                         <i class="fas fa-clipboard"></i>
                     </button>
