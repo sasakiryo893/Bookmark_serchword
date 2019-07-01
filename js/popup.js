@@ -1,3 +1,5 @@
+var domain;
+
 $(function() {
   var dao = new Dao()
 
@@ -7,11 +9,10 @@ $(function() {
         var targetText;
         var gParent;
 
-        //h2の中身(タイトル)と検索ワード比較
-        $('.site_list h5').each(function () {
+        //タイトルと検索ワード比較
+        $('.hidden_name').each(function () {
             targetText = $(this).text();
             gParent = $(this).parent();
-            gParent = $(gParent).parent();
 
             // 検索対象となるリストに入力された文字列が存在するかどうかを判断
             if (targetText.indexOf(searchText) != -1 || searchText == "") {
@@ -20,12 +21,22 @@ $(function() {
                 $(gParent).addClass('hidden');
             }
         });
-
-        //pの中身(検索履歴ワード)と検索ワード比較
-        $('.site_list p').each(function () {
+        
+        //inputの中身(検索履歴ワード)と検索ワード比較
+        $('.site_list input').each(function () {
             targetText = $(this).text(); //pの中身取得
             gParent = $(this).parent();
-            gParent = $(gParent).parent();
+
+            // 検索対象となるリストに入力された文字列が存在するかどうかを判断
+            if (targetText.indexOf(searchText) != -1) {
+                $(gParent).removeClass('hidden');
+            }
+        });
+        
+        //memoの中身と検索ワード比較
+        $('.hidden_memo').each(function () {
+            targetText = $(this).text(); //pの中身取得
+            gParent = $(this).parent();
 
             // 検索対象となるリストに入力された文字列が存在するかどうかを判断
             if (targetText.indexOf(searchText) != -1) {
@@ -66,20 +77,43 @@ function substr(text, len, truncation) {
   return text;
 }
 
-$(document).on('click','.site_info',function(){
-    let url = $(this).children('.hidden_url').text();
-    window.open(url,'_brank');
+$(document).on('click','.site_info',function(event){
+    var target = event.target;
+    var clickCheck = false;
+    target.classList.forEach(function(value){
+        var test = value;
+       if(value =='btn' || value == 'fas'){
+           clickCheck = true;
+       }
+    });
+    if(clickCheck == false){
+        let url = $(this).children('.hidden_url').text();
+        window.open(url,'_brank');
+    }
+    
+});
+
+$(document).on('click','.copy-btn',function(){
+    var prev = this.previousElementSibling;
+    // コピー対象のテキストを選択する
+    prev.select();
+    // 選択しているテキストをクリップボードにコピーする
+    document.execCommand("Copy");
+    
 });
 
 $(document).on('mouseover','.site_info',function(){
     $(this).css('background', '#f0f8ff');
+    
+    $(this).children('.hidden').removeClass('hidden');
+    $(this).children('.hidden').removeClass('hidden');
 
     var text =$(this).children('.hidden_memo').text();
     var option =
     (`
-      <span id='hidden_memo'>
+      <p id='hidden_memo'>
         ${text}
-      </span>
+      </p>
     `);
     $(this).append(option);
 
@@ -87,7 +121,10 @@ $(document).on('mouseover','.site_info',function(){
 
 $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
-    $(this).find('span:last').remove();
+    $(this).find('p:last').remove();
+    
+    $(this).children('.site_search_word').addClass('hidden');
+    $(this).children('.site_url').addClass('hidden');
 });
 
 $(document).on('contextmenu','.site_info',function(){
@@ -111,19 +148,37 @@ var init = function(dao){
 
       name_short = substr(e.name, 24, '…');
       url_short = substr(e.url, 38, '…');
-      if(e.search_word == "") search_word = "<br>"
+      var url = e.url;
+      domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
+      if(domain != null){
+        domain = "http://www.google.com/s2/favicons?domain=" + domain[0];
+      } else {
+        domain = "http://www.google.com/s2/favicons?domain=" + domain;
+      }
+      console.log(domain);
+      if(e.search_word == "") search_word = ""
       else search_word = e.search_word
       $('.site_list').append(`
         <div class="site_info choice">
           <div class="site_title">
-            <h5>${name_short}</h5>
+            <div class="favicon-image-box">
+            <img src=${domain} width=10 height=10>
+            </div>
+            <p>${name_short}</p>
           </div>
-          <div class="site_search_word">
+          <div class="site_search_word hidden">
             <img src="resources/search_word.png" alt="" class="glass">
-            <p>${search_word}</p>
+            <div class="container-fluid mx-0">
+                <div class="form-group row">
+                   <input class="form-control border border-info rounded text-secondary col-10 input-sm" type="text" value=${search_word}>
+                    <button type="button" class="btn btn-info col copy-btn" data-toggle="tooltip" data-placement="top" title="コピーする">
+                        <i class="fas fa-clipboard"></i>
+                    </button>
+                </div>
+            </div>
           </div>
-          <div class="site_url">
-            <p>${url_short}</p>
+          <div class="site_url hidden">
+            ${url_short}
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}
@@ -142,7 +197,6 @@ var init = function(dao){
           </div>
         </div>
       `);
-
     });
   });
 }

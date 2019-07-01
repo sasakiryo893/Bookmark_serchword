@@ -7,11 +7,12 @@ ul {
 }
 
 .hidden {
-  display: none
+  display: none;
 }
 
 p {
   margin-bottom: 0;
+  font-size: 12px;
 }
 
 img.glass {
@@ -28,4 +29,15 @@ img.glass {
   background: whitesmoke;
   margin-bottom: 4px;/*â∫ÇÃÉoÅ[Ç∆ÇÃó]îí*/
   line-height: 1.5;
+}
+
+.copy-btn{
+    z-index: 999;
+}
+
+.favicon-image-box{
+    margin: 5px 0px 0px 0px;
+    float: left;
+    width: 10px;
+    height: 10px;
 }

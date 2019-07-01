@@ -28,10 +28,10 @@ $(function(){
 
   });
 
-  // 最近の検索ワード10件を取得してプルダウンメニューに挿入
+  // 最近の検索ワード20件を取得してプルダウンメニューに挿入
   chrome.history.search({
     text: '- Google 検索',
-    maxResults: 10
+    maxResults: 20
   },
   function (results) {
     for(var i = 0; i < results.length; i++) {
