@@ -95,11 +95,19 @@ $(document).on('click','.site_info',function(event){
 
 $(document).on('click','.copy-btn',function(){
     var prev = this.previousElementSibling;
-    // コピー対象のテキストを選択する
-    prev.select();
-    // 選択しているテキストをクリップボードにコピーする
-    document.execCommand("Copy");
-    
+
+    // seletionオブジェクトを取得します。
+    var selection = window.getSelection();
+    // rangeオブジェクトを生成します。
+    var range = document.createRange();
+    // rangeオブジェクトに p要素を与えます。
+    range.selectNodeContents(prev);
+    // 一旦、selectionオブジェクトの持つ rangeオブジェクトを削除します。
+    selection.removeAllRanges();
+    // 改めて先程生成した rangeオブジェクトを selectionオブジェクトに追加します。
+    selection.addRange(range);
+    // クリップボードにコピーします。
+    document.execCommand('copy');
 });
 
 $(document).on('mouseover','.site_info',function(){
