@@ -126,23 +126,6 @@ function txt2array(txt) {
   return result;
 }
 
-function substr(text, len, truncation) {
-  if (truncation === undefined) { truncation = '…'; }
-  var text_array = text.split('');
-  var count = 0;
-  var str = '';
-  for (i = 0; i < text_array.length; i++) {
-    var n = escape(text_array[i]);
-    if (n.length < 4) count++;
-    else count += 2;
-    if (count > len) {
-      return str + truncation;
-    }
-    str += text.charAt(i);
-  }
-  return text;
-}
-
 $(document).on('click','.site_info',function(event){
     var target = event.target;
     var clickCheck = false;
@@ -219,9 +202,6 @@ var init = function(dao){
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
-
-      name_short = substr(e.name, 24, '…');
-      url_short = substr(e.url, 38, '…');
       var url = e.url;
       domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
       if(domain != null){
@@ -238,7 +218,7 @@ var init = function(dao){
             <div class="favicon-image-box">
             <img src=${domain} width=10 height=10>
             </div>
-            <p>${name_short}</p>
+            <p>${e.name}</p>
           </div>
           <div class="site_search_word hidden">
             <img src="resources/search_word.png" alt="" class="glass">
@@ -250,9 +230,6 @@ var init = function(dao){
                     </button>
                 </div>
             </div>
-          </div>
-          <div class="site_url hidden">
-            ${url_short}
           </div>
           <div class="hidden_url" style="display:none">
             ${e.url}

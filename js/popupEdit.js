@@ -1,29 +1,7 @@
 $(function(){
   var dao = new Dao();
-  // サイト名、URLを取得
+  // サイト名を取得
   chrome.tabs.getSelected(null, function(tab) {
-
-    //バイト数が35バイト以上なら3点リーダをつける
-    function substr(text, len, truncation) {
-      if (truncation === undefined) { truncation = '…'; }
-      var text_array = text.split('');
-      var count = 0;
-      var str = '';
-      for (i = 0; i < text_array.length; i++) {
-        var n = escape(text_array[i]);
-        if (n.length < 4) count++;
-        else count += 2;
-        if (count > len) {
-          return str + truncation;
-        }
-        str += text.charAt(i);
-      }
-      return text;
-    }
-
-    let input_text_url = substr(getParam(2),34,'…');
-    $('#input_url').html(input_text_url);
-
   });
 
   // 編集登録
