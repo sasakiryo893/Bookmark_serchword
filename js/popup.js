@@ -53,15 +53,23 @@ $(function() {
   });
 
   //追加
-  $('#Bt_Add').on('click',function(){
+  $('#Bt_Add').on('click', function(){
     window.location.href = '/popupWindow.html';
   })
 
   //書き出し
-  $('#Bt_Export').on('click',function(){
+  $('#Bt_Export').on('click', function(){
     dao.exportArray(function(array) {
-      exportTSV(array)
+      exportTSV(array);
     })
+  })
+
+  //読み込み
+  $('#Bt_Import').on('click', function(){
+    var array = importTSV(function(array) {
+      dao.importArray(array);
+      init(dao);
+    });
   })
 
   init(dao);
@@ -75,7 +83,7 @@ function exportTSV(array) {
 
     var tsv = array.map(
       function(l){
-        return l.join(' ')
+        return l.join('\t')
       }).join('\r\n');
 
     var blob = new Blob([bom, tsv], { type: 'text/tsv'});
@@ -87,6 +95,35 @@ function exportTSV(array) {
     a.href = url;
 
     $('#downloadTSV')[0].click();
+}
+
+function importTSV(callback) {
+  var file = $('#uploadTSV')[0];
+  var result;
+  file.click();
+  file.onchange = function() {
+    const filelist = file.files
+    var reader = new FileReader()
+    reader.readAsText(filelist[0])
+    reader.onload = function(e) {
+      result = txt2array(reader.result)
+      callback(result);
+    }
+    reader.onerror = function() {
+      alert("ファイルを読み込めませんでした。");
+    }
+  }
+}
+
+
+function txt2array(txt) {
+  txt = txt.split("\t");
+  var result = [];
+  while(txt[0]) {
+    result.push(txt.splice(0, 4));
+  }
+
+  return result;
 }
 
 function substr(text, len, truncation) {
@@ -279,14 +316,13 @@ var Dao = function(){
   }
 
   // 配列ではき出す
-  this.exportArray = function(callback){
+  this.exportArray = function(callback) {
     db.transaction(function(tx) {
       tx.executeSql('select * from search', [],
         function(tx, results) {
           var list = [];
           for (i = 0; i < results.rows.length; i++){
             list.push([
-              results.rows.item(i).id,
               results.rows.item(i).name,
               results.rows.item(i).url,
               results.rows.item(i).search_word,
@@ -296,5 +332,14 @@ var Dao = function(){
           callback(list);
         });
     });
+  }
+
+  // 配列から読み込む
+  this.importArray = function(array) {
+    db.transaction(function(tx) {
+      for(i = 0; i < array.length; i++) {
+          tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [array[i][0], array[i][1], array[i][2], array[i][3]]);
+      }
+    })
   }
 }
