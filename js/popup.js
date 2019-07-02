@@ -57,8 +57,37 @@ $(function() {
     window.location.href = '/popupWindow.html';
   })
 
+  //書き出し
+  $('#Bt_Export').on('click',function(){
+    dao.exportArray(function(array) {
+      exportTSV(array)
+    })
+  })
+
   init(dao);
 });
+
+
+
+function exportTSV(array) {
+    // 文字化け対策
+    var bom = new Uint8Array([0xEF, 0xBB, 0xBF]);
+
+    var tsv = array.map(
+      function(l){
+        return l.join(' ')
+      }).join('\r\n');
+
+    var blob = new Blob([bom, tsv], { type: 'text/tsv'});
+
+    var url = (window.URL || window.webkitURL).createObjectURL(blob);
+
+    var a = document.getElementById('downloadTSV');
+    a.download = 'data.tsv';
+    a.href = url;
+
+    $('#downloadTSV')[0].click();
+}
 
 function substr(text, len, truncation) {
   if (truncation === undefined) { truncation = '…'; }
@@ -217,7 +246,7 @@ var Dao = function(){
   var db = openDatabase(name, version, description, size);
 
   // テーブル作成
-  db.transaction(function(tx){
+  db.transaction(function(tx) {
     tx.executeSql(`
       create table if not exists search (
         id integer primary key autoincrement,
@@ -230,10 +259,10 @@ var Dao = function(){
   })
 
   // 全件検索
-  this.findAll = function(callback){
-    db.transaction(function (tx){
+  this.findAll = function(callback) {
+    db.transaction(function(tx) {
       tx.executeSql('select * from search order by id desc', [],
-        function (tx, results){
+        function(tx, results) {
           var list = []
           for (i = 0; i < results.rows.length; i++){
             list.push({
@@ -241,8 +270,28 @@ var Dao = function(){
               name: results.rows.item(i).name,
               url: results.rows.item(i).url,
               search_word: results.rows.item(i).search_word,
-              memo: results.rows.item(i).memo,
+              memo: results.rows.item(i).memo
             });
+          };
+          callback(list);
+        });
+    });
+  }
+
+  // 配列ではき出す
+  this.exportArray = function(callback){
+    db.transaction(function(tx) {
+      tx.executeSql('select * from search', [],
+        function(tx, results) {
+          var list = [];
+          for (i = 0; i < results.rows.length; i++){
+            list.push([
+              results.rows.item(i).id,
+              results.rows.item(i).name,
+              results.rows.item(i).url,
+              results.rows.item(i).search_word,
+              results.rows.item(i).memo
+            ]);
           };
           callback(list);
         });
