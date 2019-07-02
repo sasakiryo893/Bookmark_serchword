@@ -84,7 +84,7 @@ function exportTSV(array) {
     var tsv = array.map(
       function(l){
         return l.join('\t')
-      }).join('\r\n');
+      }).join('\t\r\n');
 
     var blob = new Blob([bom, tsv], { type: 'text/tsv'});
 
