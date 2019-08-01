@@ -10,5 +10,5 @@
   },
   "manifest_version": 2,
 
-  "permissions": ["tabs","history"]
+  "permissions": ["tabs","history","bookmarks"]
 }
