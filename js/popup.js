@@ -89,6 +89,10 @@ $(function() {
     });
   })
 
+  $('#Bt_Add_folder').on('click', function(){
+    window.location.href = '/popupFolder.html';
+  })
+
   init(dao);
 });
 
@@ -216,6 +220,18 @@ String.prototype.bytes = function () {
 var init = function(dao){
   // TODO表の削除
   $('.site_list').empty()
+
+  // //folderの一覧表示
+  // dao.findAll(function(list){
+  //   $.each(list, function(i, e){
+  //     $('.site_list').append(`
+  //         <div class="folder">
+  //           <div class="folder_name">${e.name}</div>
+  //         </div>
+  //       `)
+  //   })
+  // })
+
   // TODO表の表示
   dao.findAll(function(list){
     $.each(list, function(i, e){
@@ -229,6 +245,7 @@ var init = function(dao){
       console.log(domain);
       if(e.search_word == "") search_word = ""
       else search_word = e.search_word
+
       $('.site_list').append(`
         <div class="site_info choice">
           <div class="site_title">
