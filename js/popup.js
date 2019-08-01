@@ -89,6 +89,10 @@ $(function() {
     });
   })
 
+  $('#Bt_Add_folder').on('click', function(){
+    window.location.href = '/popupFolder.html';
+  })
+
   init(dao);
 });
 
@@ -216,6 +220,20 @@ String.prototype.bytes = function () {
 var init = function(dao){
   // TODO表の削除
   $('.site_list').empty()
+
+  // //folderの一覧表示
+  dao.findAll_folder(0,function(list){
+
+    console.log(list);
+    $.each(list, function(i, e){
+      $('.site_list').append(`
+          <div class="folder">
+            <div class="folder_name">${e.name}</div>
+          </div>
+        `)
+    })
+  })
+
   // TODO表の表示
 
   dao.findAll_bookmarks(function(list){
@@ -230,6 +248,7 @@ var init = function(dao){
       console.log(domain);
       if(e.search_word == "") search_word = ""
       else search_word = e.search_word
+
       $('.site_list').append(`
         <div class="site_info choice">
           <div class="site_title">
@@ -301,7 +320,8 @@ var Dao = function(){
   // フォルダー全権検索
   this.findAll_folder = function(id, callback) {
     db.transaction(function(tx) {
-      tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
+      // tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
+      tx.executeSql('select * from folders',[],
         function(tx, results) {
           var list = [];
           for (i = 0; i < results.rows.length; i++){
@@ -311,6 +331,7 @@ var Dao = function(){
               parent_id: results.rows.item(i).parent_id
             });
           };
+          console.log(list);
           callback(list);
         });
     });
@@ -367,7 +388,7 @@ var Dao = function(){
   //登録
   this.insert = function(site, url, word, memo){
     db.transaction(function (tx){
-      tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+      tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
     });
   }
 }
