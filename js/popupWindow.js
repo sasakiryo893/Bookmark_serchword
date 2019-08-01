@@ -76,11 +76,4 @@ var Dao = function(){
     });
   }
 
-  this.add_folder = function(name, parent_id, callback){
-    db.transaction(function(tx){
-      tx.executeSql('insert into folders (name, parent_id)', [name, parent_id]);
-      callback();
-    });
-  }
-
 }

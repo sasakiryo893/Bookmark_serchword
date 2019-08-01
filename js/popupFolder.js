@@ -2,11 +2,22 @@ $(function(){
   $('#Bt_Regi').on('click',function(){
     var dao = new Dao
     // console.log($('textarea[name="nanndemoii"]').val());
-    var name = $('textarea[name="nanndemoii"]').val().trim();
+    var name = $('input#input_folder_title').val().trim();
     dao.add_folder(name,0, function() {
       window.location.href = '/popup.html';
     });
   });
+
+  // topに戻る
+  $('#Bt_Cancel').on('click',function(){
+    window.location.href = '/popup.html';
+  });
+
+  // close
+  $('.close').on('click',function(){
+    window.close();
+  });
+
 })
 
 var Dao = function(){
