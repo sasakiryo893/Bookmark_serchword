@@ -223,6 +223,8 @@ var init = function(dao){
 
   // //folderの一覧表示
   dao.findAll_folder(0,function(list){
+
+    console.log(list);
     $.each(list, function(i, e){
       $('.site_list').append(`
           <div class="folder">
@@ -318,7 +320,8 @@ var Dao = function(){
   // フォルダー全権検索
   this.findAll_folder = function(id, callback) {
     db.transaction(function(tx) {
-      tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
+      // tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
+      tx.executeSql('select * from folders',[],
         function(tx, results) {
           var list = [];
           for (i = 0; i < results.rows.length; i++){
@@ -328,6 +331,7 @@ var Dao = function(){
               parent_id: results.rows.item(i).parent_id
             });
           };
+          console.log(list);
           callback(list);
         });
     });

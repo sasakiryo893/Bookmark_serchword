@@ -1,8 +1,9 @@
 $(function(){
   $('#Bt_Regi').on('click',function(){
-    console.log($('textarea[name="nanndemoii"]').val());
+    var dao = new Dao
+    // console.log($('textarea[name="nanndemoii"]').val());
     var name = $('textarea[name="nanndemoii"]').val().trim();
-    dao.insert(name,0, function() {
+    dao.add_folder(name,0, function() {
       window.location.href = '/popup.html';
     });
   });
@@ -18,7 +19,7 @@ var Dao = function(){
   // 登録
   this.add_folder = function(name, parent_id, callback){
     db.transaction(function(tx){
-      tx.executeSql('insert into folders (name, parent_id)', [name, parent_id]);
+      tx.executeSql('insert into folders (name, parent_id) values (?, ?)', [name, parent_id]);
       callback();
     });
   }
