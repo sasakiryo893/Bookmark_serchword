@@ -77,7 +77,7 @@ var Dao = function(){
   // 編集保存
   this.update = function(id, site, url, word, memo, callback){
     db.transaction(function (tx){
-      tx.executeSql('update search SET name=?, url=?, search_word=?, memo=? WHERE id=?', [site, url, word, memo,id]);
+      tx.executeSql('update bookmarks SET name=?, url=?, search_word=?, memo=? WHERE id=?', [site, url, word, memo,id]);
       callback();
     });
   }
@@ -85,7 +85,7 @@ var Dao = function(){
   // 削除
   this.remove = function(id, callback){
     db.transaction(function (tx){
-      tx.executeSql('delete from search where id = ?', [id]);
+      tx.executeSql('delete from bookmarks where id = ?', [id]);
       callback();
     });
   }

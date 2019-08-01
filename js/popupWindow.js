@@ -44,7 +44,7 @@ $(function(){
       var url = tab.url;
       var word = $('select#search_word').val();
       var memo = $('textarea#input_memo').val().trim();
-      dao.insert(site, url, word, memo, function() {
+      dao.add_bookmark(site, url, word, memo, function() {
         window.location.href = '/popup.html';
       });
     });
@@ -69,9 +69,16 @@ var Dao = function(){
   var db = openDatabase(name, version, description, size);
 
   // 登録
-  this.insert = function(site, url, word, memo, callback){
+  this.add_bookmark = function(site, url, word, memo, callback){
     db.transaction(function (tx){
-      tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+      tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+      callback();
+    });
+  }
+
+  this.add_folder = function(name, parent_id, callback){
+    db.transaction(function(tx){
+      tx.executeSql('insert into folders (name, parent_id)', [name, parent_id]);
       callback();
     });
   }
