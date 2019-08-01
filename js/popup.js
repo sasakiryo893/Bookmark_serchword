@@ -21,7 +21,7 @@ $(function() {
                 $(gParent).addClass('hidden');
             }
         });
-        
+
         //inputの中身(検索履歴ワード)と検索ワード比較
         $('.site_list input').each(function () {
             targetText = $(this).text(); //pの中身取得
@@ -32,7 +32,7 @@ $(function() {
                 $(gParent).removeClass('hidden');
             }
         });
-        
+
         //memoの中身と検索ワード比較
         $('.hidden_memo').each(function () {
             targetText = $(this).text(); //pの中身取得
@@ -68,6 +68,23 @@ $(function() {
   $('#Bt_Import').on('click', function(){
     var array = importTSV(function(array) {
       dao.importArray(array);
+      init(dao);
+    });
+  })
+
+  //ブックマークからのインポート
+  $('#Bt_Add_bookmark').on('click',function(){
+    chrome.bookmarks.getTree(function(roots){
+      roots.forEach(parser);
+      function parser(node){
+        if (node.children) {
+          //今は分解して一個ずつインポートしてる
+          //フォルダ作成後その処理もってきて修正
+          node.children.forEach(parser);
+        } else if(node) {
+          dao.insert(node.title,node.url,"","");
+        }
+      }
       init(dao);
     });
   })
@@ -139,7 +156,7 @@ $(document).on('click','.site_info',function(event){
         let url = $(this).children('.hidden_url').text();
         window.open(url,'_brank');
     }
-    
+
 });
 
 $(document).on('click','.copy-btn',function(){
@@ -161,7 +178,7 @@ $(document).on('click','.copy-btn',function(){
 
 $(document).on('mouseover','.site_info',function(){
     $(this).css('background', '#f0f8ff');
-    
+
     $(this).children('.hidden').removeClass('hidden');
     $(this).children('.hidden').removeClass('hidden');
 
@@ -179,7 +196,7 @@ $(document).on('mouseover','.site_info',function(){
 $(document).on('mouseout','.site_info',function(){
     $(this).css('background', '');
     $(this).find('p:last').remove();
-    
+
     $(this).children('.site_search_word').addClass('hidden');
     $(this).children('.site_url').addClass('hidden');
 });
@@ -345,5 +362,12 @@ var Dao = function(){
           tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [array[i][0], array[i][1], array[i][2], array[i][3]]);
       }
     })
+  }
+
+  //登録
+  this.insert = function(site, url, word, memo){
+    db.transaction(function (tx){
+      tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+    });
   }
 }
