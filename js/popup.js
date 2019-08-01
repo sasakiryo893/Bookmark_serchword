@@ -222,15 +222,15 @@ var init = function(dao){
   $('.site_list').empty()
 
   // //folderの一覧表示
-  // dao.findAll(function(list){
-  //   $.each(list, function(i, e){
-  //     $('.site_list').append(`
-  //         <div class="folder">
-  //           <div class="folder_name">${e.name}</div>
-  //         </div>
-  //       `)
-  //   })
-  // })
+  dao.findAll_folder(0,function(list){
+    $.each(list, function(i, e){
+      $('.site_list').append(`
+          <div class="folder">
+            <div class="folder_name">${e.name}</div>
+          </div>
+        `)
+    })
+  })
 
   // TODO表の表示
 
@@ -384,7 +384,7 @@ var Dao = function(){
   //登録
   this.insert = function(site, url, word, memo){
     db.transaction(function (tx){
-      tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+      tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
     });
   }
 }
