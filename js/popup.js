@@ -200,7 +200,8 @@ var init = function(dao){
   // TODO表の削除
   $('.site_list').empty()
   // TODO表の表示
-  dao.findAll(function(list){
+
+  dao.findAll_bookmarks(function(list){
     $.each(list, function(i, e){
       var url = e.url;
       domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
@@ -262,22 +263,48 @@ var Dao = function(){
   // テーブル作成
   db.transaction(function(tx) {
     tx.executeSql(`
-      create table if not exists search (
+      create table if not exists bookmarks (
         id integer primary key autoincrement,
         name varchar(300) not null,
         url varchar(2083) not null,
         search_word varchar(100) null,
-        memo text null
+        memo text null,
+        folder_id integer default 0
       )
-    `)
+    `);
+    tx.executeSql(`
+      create table if not exists folders (
+        id integer primary key autoincrement,
+        name varchar(300) not null,
+        parent_id integer default 0
+      )
+    `);
   })
 
-  // 全件検索
-  this.findAll = function(callback) {
+  // フォルダー全権検索
+  this.findAll_folder = function(id, callback) {
     db.transaction(function(tx) {
-      tx.executeSql('select * from search order by id desc', [],
+      tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
         function(tx, results) {
-          var list = []
+          var list = [];
+          for (i = 0; i < results.rows.length; i++){
+            list.push({
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              parent_id: results.rows.item(i).parent_id
+            });
+          };
+          callback(list);
+        });
+    });
+  }
+
+  // ブックマーク全件検索
+  this.findAll_bookmarks = function(callback) {
+    db.transaction(function(tx) {
+      tx.executeSql('select * from bookmarks order by id desc', [],
+        function(tx, results) {
+          var list = [];
           for (i = 0; i < results.rows.length; i++){
             list.push({
               id: results.rows.item(i).id,
@@ -295,7 +322,7 @@ var Dao = function(){
   // 配列ではき出す
   this.exportArray = function(callback) {
     db.transaction(function(tx) {
-      tx.executeSql('select * from search', [],
+      tx.executeSql('select * from bookmarks', [],
         function(tx, results) {
           var list = [];
           for (i = 0; i < results.rows.length; i++){
@@ -315,7 +342,7 @@ var Dao = function(){
   this.importArray = function(array) {
     db.transaction(function(tx) {
       for(i = 0; i < array.length; i++) {
-          tx.executeSql('insert into search (name, url, search_word, memo) values (?, ?, ?, ?)', [array[i][0], array[i][1], array[i][2], array[i][3]]);
+          tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [array[i][0], array[i][1], array[i][2], array[i][3]]);
       }
     })
   }
