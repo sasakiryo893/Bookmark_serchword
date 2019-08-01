@@ -93,6 +93,8 @@ $(function() {
     window.location.href = '/popupFolder.html';
   })
 
+
+
   init(dao);
 });
 
@@ -213,6 +215,7 @@ $(document).on('contextmenu','.site_info',function(){
                                            + "?word=" + $(this).children('.hidden_word').text().trim();
 });
 
+
 String.prototype.bytes = function () {
   return(encodeURIComponent(this).replace(/%../g,"x").length);
 }
@@ -227,9 +230,7 @@ var init = function(dao){
     console.log(list);
     $.each(list, function(i, e){
       $('.site_list').append(`
-          <div class="folder">
             <div class="folder_name">${e.name}</div>
-          </div>
         `)
     })
   })
@@ -287,6 +288,61 @@ var init = function(dao){
       `);
     });
   });
+
+  $(document).on('click','.folder_name',function(){
+    $('.site_list').empty();
+    dao.findByFolderId_bookmarks(0,function(list){
+      $.each(list, function(i, e){
+        var url = e.url;
+        domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
+        if(domain != null){
+          domain = "http://www.google.com/s2/favicons?domain=" + domain[0];
+        } else {
+          domain = "http://www.google.com/s2/favicons?domain=" + domain;
+        }
+        console.log(domain);
+        if(e.search_word == "") search_word = ""
+        else search_word = e.search_word
+
+        $('.site_list').append(`
+          <div class="site_info choice">
+            <div class="site_title">
+              <div class="favicon-image-box">
+              <img src=${domain} width=10 height=10>
+              </div>
+              <p>${e.name}</p>
+            </div>
+            <div class="site_search_word hidden">
+              <img src="resources/search_word.png" alt="" class="glass">
+              <div class="container-fluid mx-0">
+                  <div class="form-group row">
+                     <p class="form-control border border-info col-10 input-sm" type="text">${search_word}</p>
+                      <button type="button" class="btn btn-info col copy-btn" data-toggle="tooltip" data-placement="top" title="コピーする">
+                          <i class="fas fa-clipboard"></i>
+                      </button>
+                  </div>
+              </div>
+            </div>
+            <div class="hidden_url" style="display:none">
+              ${e.url}
+            </div>
+            <div class="hidden_id" style="display:none">
+              ${e.id}
+            </div>
+            <div class="hidden_name" style="display:none">
+              ${e.name}
+            </div>
+            <div class="hidden_word" style="display:none">
+              ${e.search_word}
+            </div>
+            <div class="hidden_memo" style="display:none">
+              ${e.memo}
+            </div>
+          </div>
+        `);
+      });
+    });
+  })
 }
 
 var Dao = function(){
@@ -320,8 +376,7 @@ var Dao = function(){
   // フォルダー全権検索
   this.findAll_folder = function(id, callback) {
     db.transaction(function(tx) {
-      // tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
-      tx.executeSql('select * from folders',[],
+      tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
         function(tx, results) {
           var list = [];
           for (i = 0; i < results.rows.length; i++){
@@ -356,6 +411,27 @@ var Dao = function(){
         });
     });
   }
+
+  // ブックマーク全件検索
+  this.findByFolderId_bookmarks = function(id,callback) {
+    db.transaction(function(tx) {
+      tx.executeSql('select * from bookmarks where folder_id = ? order by id desc', [id],
+        function(tx, results) {
+          var list = [];
+          for (i = 0; i < results.rows.length; i++){
+            list.push({
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              url: results.rows.item(i).url,
+              search_word: results.rows.item(i).search_word,
+              memo: results.rows.item(i).memo
+            });
+          };
+          callback(list);
+        });
+    });
+  }
+
 
   // 配列ではき出す
   this.exportArray = function(callback) {
