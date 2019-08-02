@@ -1,7 +1,7 @@
 var domain;
 
 $(function() {
-  var dao = new Dao()
+  var dao = new Dao();
 
   //検索ワード検索
     $('#Bt_Search').on('click', function () {
@@ -54,15 +54,15 @@ $(function() {
 
   //追加
   $('#Bt_Add').on('click', function(){
-    window.location.href = '/popupWindow.html';
-  })
+    window.location.href = '/popupWindow.html' + "?folder_id=" + $('.current_folder_id').attr('id');
+  });
 
   //書き出し
   $('#Bt_Export').on('click', function(){
     dao.exportArray(function(array) {
       exportTSV(array);
-    })
-  })
+    });
+  });
 
   //読み込み
   $('#Bt_Import').on('click', function(){
@@ -70,7 +70,7 @@ $(function() {
       dao.importArray(array);
       init(dao);
     });
-  })
+  });
 
   //ブックマークからのインポート
   $('#Bt_Add_bookmark').on('click',function(){
@@ -91,7 +91,7 @@ $(function() {
 
   $('#Bt_Add_folder').on('click', function(){
     window.location.href = '/popupFolder.html';
-  })
+  });
 
 
 
@@ -222,18 +222,18 @@ String.prototype.bytes = function () {
 
 var init = function(dao){
   // TODO表の削除
-  $('.site_list').empty()
+  $('.site_list').empty();
 
   // //folderの一覧表示
   dao.findAll_folder(0,function(list){
-
-    console.log(list);
     $.each(list, function(i, e){
       $('.site_list').append(`
-            <div class="folder_name">${e.name}</div>
-        `)
-    })
-  })
+        <div class="folder_name" id="${e.id}">
+          ${e.name}
+        </div>
+      `);
+    });
+  });
 
   // TODO表の表示
 
@@ -291,7 +291,24 @@ var init = function(dao){
 
   $(document).on('click','.folder_name',function(){
     $('.site_list').empty();
-    dao.findByFolderId_bookmarks(0,function(list){
+
+    var current_folder_id = $(this).attr('id');
+    var current_folder_name = $(this).html();
+    $('.site_list').append(`
+      <div class="current_folder_id" id="${current_folder_id}">
+        現在のフォルダ：${current_folder_name}
+      </div>
+      `);
+
+    dao.findAll_folder(current_folder_id,function(list){
+      $.each(list, function(i, e){
+        $('.site_list').append(`
+              <div class="folder_name" id="${e.id}">${e.name}</div>
+          `);
+      });
+    });
+
+    dao.findByFolderId_bookmarks(current_folder_id,function(list){
       $.each(list, function(i, e){
         var url = e.url;
         domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
@@ -342,7 +359,7 @@ var init = function(dao){
         `);
       });
     });
-  })
+  });
 }
 
 var Dao = function(){
@@ -371,7 +388,7 @@ var Dao = function(){
         parent_id integer default 0
       )
     `);
-  })
+  });
 
   // フォルダー全権検索
   this.findAll_folder = function(id, callback) {
@@ -385,7 +402,7 @@ var Dao = function(){
               name: results.rows.item(i).name,
               parent_id: results.rows.item(i).parent_id
             });
-          };
+          }
           console.log(list);
           callback(list);
         });
@@ -406,7 +423,7 @@ var Dao = function(){
               search_word: results.rows.item(i).search_word,
               memo: results.rows.item(i).memo
             });
-          };
+          }
           callback(list);
         });
     });
@@ -426,7 +443,7 @@ var Dao = function(){
               search_word: results.rows.item(i).search_word,
               memo: results.rows.item(i).memo
             });
-          };
+          }
           callback(list);
         });
     });
@@ -446,7 +463,7 @@ var Dao = function(){
               results.rows.item(i).search_word,
               results.rows.item(i).memo
             ]);
-          };
+          }
           callback(list);
         });
     });
@@ -458,7 +475,7 @@ var Dao = function(){
       for(i = 0; i < array.length; i++) {
           tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [array[i][0], array[i][1], array[i][2], array[i][3]]);
       }
-    })
+    });
   }
 
   //登録

@@ -44,7 +44,8 @@ $(function(){
       var url = tab.url;
       var word = $('select#search_word').val();
       var memo = $('textarea#input_memo').val().trim();
-      dao.add_bookmark(site, url, word, memo, function() {
+      var folder_id = getParam(0);
+      dao.add_bookmark(site, url, word, memo, folder_id, function() {
         window.location.href = '/popup.html';
       });
     });
@@ -61,6 +62,18 @@ $(function(){
   })
 });
 
+function getParam(i) {
+  var url = location.href;
+  parameters = url.split("?");
+  // current_folder_id取得
+  params = parameters[1].split("=");
+  folder_id = params[1];
+
+  var list = [folder_id];
+
+  return list[i];
+}
+
 var Dao = function(){
   var name = 'localdb';
   var version = '1.0';
@@ -69,9 +82,9 @@ var Dao = function(){
   var db = openDatabase(name, version, description, size);
 
   // 登録
-  this.add_bookmark = function(site, url, word, memo, callback){
+  this.add_bookmark = function(site, url, word, memo, folder_id, callback){
     db.transaction(function (tx){
-      tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+      tx.executeSql('insert into bookmarks (name, url, search_word, memo, folder_id) values (?, ?, ?, ?, ?)', [site, url, word, memo, folder_id]);
       callback();
     });
   }
