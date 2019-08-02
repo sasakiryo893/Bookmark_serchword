@@ -3,7 +3,7 @@ $(function(){
     var dao = new Dao
     // console.log($('textarea[name="nanndemoii"]').val());
     var name = $('input#input_folder_title').val().trim();
-    dao.add_folder(name,0, function() {
+    dao.add_folder(name, getParam(0), function() {
       window.location.href = '/popup.html';
     });
   });
@@ -19,6 +19,18 @@ $(function(){
   });
 
 })
+
+function getParam(i) {
+  var url = location.href;
+  parameters = url.split("?");
+  // parent_folder_id取得
+  params = parameters[1].split("=");
+  parent_id = params[1];
+
+  var list = [parent_id];
+
+  return list[i];
+}
 
 var Dao = function(){
   var name = 'localdb';

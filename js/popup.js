@@ -90,7 +90,7 @@ $(function() {
   })
 
   $('#Bt_Add_folder').on('click', function(){
-    window.location.href = '/popupFolder.html';
+    window.location.href = '/popupFolder.html' + "?folder_id=" + $('.current_folder_id').attr('id');
   });
 
 
