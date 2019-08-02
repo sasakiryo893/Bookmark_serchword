@@ -93,12 +93,38 @@ $(function() {
     window.location.href = '/popupFolder.html' + "?folder_id=" + $('.current_folder_id').attr('id');
   });
 
+  $('#Bt_Go_Back').on('click', function(){
+    if($('.current_folder_id').attr('id') == 0){
+      return;
+    } else {
+      dao.getFolderInfoByFolderId($('.current_folder_id').attr('id'), function(list){
+        parent_folder_name = list[0][0];
+        parent_folder_id = list[0][1];
+        $('.site_list').empty();
+        $('.site_list').append(`
+          <div class="current_folder_id" id="${parent_folder_id}">
+            現在のフォルダ：${parent_folder_name}
+          </div>
+        `);
 
+        findByFolderId_All(parent_folder_id, dao);
+      });
+    }
+  });
+
+  $('#Bt_Go_Root').on('click', function(){
+    $('.site_list').empty();
+    $('.site_list').append(`
+      <div class="current_folder_id" id="0">
+        現在のフォルダ：root
+      </div>
+    `);
+
+    findByFolderId_All(0, dao);
+  });
 
   init(dao);
 });
-
-
 
 function exportTSV(array) {
     // 文字化け対策
@@ -408,8 +434,24 @@ var Dao = function(){
 
   //登録
   this.insert = function(site, url, word, memo){
-    db.transaction(function (tx){
+    db.transaction(function(tx){
       tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+    });
+  }
+
+  this.getFolderInfoByFolderId = function(folder_id, callback){
+    db.transaction(function(tx){
+      tx.executeSql('select name, parent_id from folders where id=?', [folder_id],
+      function(tx, results){
+        var list = [];
+        for (var i = 0; i < results.rows.length; i++) {
+          list.push([
+            results.rows.item(i).name,
+            results.rows.item(i).parent_id
+          ]);
+        }
+        callback(list);
+      });
     });
   }
 }

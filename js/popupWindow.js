@@ -46,14 +46,14 @@ $(function(){
       var memo = $('textarea#input_memo').val().trim();
       var folder_id = getParam(0);
       dao.add_bookmark(site, url, word, memo, folder_id, function() {
-        window.location.href = '/popup.html';
+        window.location.href = '/popup.html' + "?folder_id=" + folder_id;
       });
     });
   });
 
   // topに戻る
   $('#Bt_Cancel').on('click',function(){
-    window.location.href = '/popup.html';
+    window.location.href = '/popup.html' + "?folder_id=" + folder_id;
   })
 
   // close
