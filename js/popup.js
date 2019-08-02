@@ -235,9 +235,7 @@ var init = function(dao){
     });
   });
 
-  // TODO表の表示
-
-  dao.findAll_bookmarks(function(list){
+  dao.findByFolderId_bookmarks(0, function(list){
     $.each(list, function(i, e){
       var url = e.url;
       domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
@@ -300,7 +298,7 @@ var init = function(dao){
       </div>
       `);
 
-    dao.findAll_folder(current_folder_id,function(list){
+    dao.findAll_folder(current_folder_id, function(list){
       $.each(list, function(i, e){
         $('.site_list').append(`
               <div class="folder_name" id="${e.id}">${e.name}</div>
@@ -308,7 +306,7 @@ var init = function(dao){
       });
     });
 
-    dao.findByFolderId_bookmarks(current_folder_id,function(list){
+    dao.findByFolderId_bookmarks(current_folder_id, function(list){
       $.each(list, function(i, e){
         var url = e.url;
         domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
