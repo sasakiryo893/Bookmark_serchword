@@ -225,7 +225,7 @@ var init = function(dao){
   $('.site_list').empty();
 
   // //folderの一覧表示
-  dao.findAll_folder(0,function(list){
+  dao.findByParentId_folders(0,function(list){
     $.each(list, function(i, e){
       $('.site_list').append(`
         <div class="folder_name" id="${e.id}">
@@ -298,7 +298,7 @@ var init = function(dao){
       </div>
       `);
 
-    dao.findAll_folder(current_folder_id, function(list){
+    dao.findByParentId_folders(current_folder_id, function(list){
       $.each(list, function(i, e){
         $('.site_list').append(`
               <div class="folder_name" id="${e.id}">${e.name}</div>
@@ -388,8 +388,8 @@ var Dao = function(){
     `);
   });
 
-  // フォルダー全権検索
-  this.findAll_folder = function(id, callback) {
+  // フォルダー全件検索
+  this.findByParentId_folders = function(id, callback) {
     db.transaction(function(tx) {
       tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
         function(tx, results) {
@@ -402,26 +402,6 @@ var Dao = function(){
             });
           }
           console.log(list);
-          callback(list);
-        });
-    });
-  }
-
-  // ブックマーク全件検索
-  this.findAll_bookmarks = function(callback) {
-    db.transaction(function(tx) {
-      tx.executeSql('select * from bookmarks order by id desc', [],
-        function(tx, results) {
-          var list = [];
-          for (i = 0; i < results.rows.length; i++){
-            list.push({
-              id: results.rows.item(i).id,
-              name: results.rows.item(i).name,
-              url: results.rows.item(i).url,
-              search_word: results.rows.item(i).search_word,
-              memo: results.rows.item(i).memo
-            });
-          }
           callback(list);
         });
     });
@@ -446,7 +426,6 @@ var Dao = function(){
         });
     });
   }
-
 
   // 配列ではき出す
   this.exportArray = function(callback) {
