@@ -224,6 +224,12 @@ var init = function(dao){
   // TODO表の削除
   $('.site_list').empty();
 
+  $('.site_list').append(`
+    <div class="current_folder_id" id="0">
+      現在のフォルダ：root
+    </div>
+  `);
+
   // //folderの一覧表示
   dao.findByParentId_folders(0,function(list){
     $.each(list, function(i, e){
