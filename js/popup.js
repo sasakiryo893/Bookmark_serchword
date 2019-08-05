@@ -254,12 +254,9 @@ $(document).on('mouseover','.site_info',function(){
 
 });
 
-$(document).on('mouseout','.site_info',function(){
-    $(this).css('background', '');
-    $(this).find('p:last').remove();
-
-    $(this).children('.site_search_word').addClass('hidden');
-    $(this).children('.site_url').addClass('hidden');
+$(document).on('contextmenu','.folder_name',function(){
+  window.location.href = '/popupFolderEdit.html' + "?id=" +  $(this).attr('id').trim()
+                                                 + "?name=" + $(this).html().trim();
 });
 
 $(document).on('contextmenu','.site_info',function(){
@@ -270,6 +267,13 @@ $(document).on('contextmenu','.site_info',function(){
                                            + "?word=" + $(this).children('.hidden_word').text().trim();
 });
 
+$(document).on('mouseout','.site_info',function(){
+  $(this).css('background', '');
+  $(this).find('p:last').remove();
+
+  $(this).children('.site_search_word').addClass('hidden');
+  $(this).children('.site_url').addClass('hidden');
+});
 
 String.prototype.bytes = function () {
   return(encodeURIComponent(this).replace(/%../g,"x").length);

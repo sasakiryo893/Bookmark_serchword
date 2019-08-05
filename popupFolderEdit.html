@@ -6,7 +6,7 @@
 
   <script src="js/jQuery-3.3.1.min.js"></script>
   <script src="js/bootstrap.bundle.min.js"></script>
-  <script src="js/popupEdit.js"></script>
+  <script src="js/popupFolderEdit.js"></script>
 </head>
 
 <body>
@@ -14,7 +14,7 @@
   <div id="popup1">
     <div class="header row">
       <div class="regi pl-0 col mt-2 mb-2">
-        　　ブックマーク編集画面
+        　　フォルダー編集画面
       </div>
       <div class="col-auto"></div>
       <a class="close col text-right mr-2">&times;</a>
@@ -22,19 +22,9 @@
     <div class="popup">
       <div class="content">
         <div class="under_line row">
-          <div id="site_name" class="col-3 px-0">サイト名</div>
-          <input type="text" id="input_site" class="col-9 px-0"></input>
+          <div id="folder_name" class="col-3 px-0">フォルダー名</div>
+          <input type="text" id="input_name" class="col-9 px-0"></input>
         </div>
-
-        <div class="under_line row">
-          <div id="search_name" class="col-3 px-0">検索ワード</div>
-          <div id="input_search" class="col-9 px-0">
-          <input type="text" style="width:300px;" name="search_word" id="search_word"></input>
-          </div>
-        </div>
-
-        <div class="memo_name">MEMO</div>
-        <div class="memowrap"><textarea class="memo" type="text" rows="5" cols="45" id="input_memo" name="memo"></textarea></div>
       </div>
 
       <div class="row justify-content-center">
