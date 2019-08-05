@@ -528,4 +528,11 @@ var Dao = function(){
     }
   }
 
+  this.deleteAllTables = function(){
+    db.transaction(function(tx){
+      tx.executeSql('drop table bookmarks');
+      tx.executeSql('drop table folders');
+    })
+  }
+
 }
