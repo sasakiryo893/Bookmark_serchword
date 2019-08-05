@@ -18,7 +18,7 @@ $(function(){
   $('#Bt_Remove').on('click',function(){
     const id = getParam(0);
     var parent_id = getParam(2);
-    dao.remove(idx, function() {
+    dao.remove(id, function() {
       window.location.href = '/popup.html' + "?folder_id=" + parent_id;
     });
   })

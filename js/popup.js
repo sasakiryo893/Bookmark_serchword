@@ -306,7 +306,6 @@ var init = function(dao){
     `);
     findByFolderId_All(0, dao);
   } else {
-    alert(pre_folder_id)
     dao.getFolderInfoByFolderId(pre_folder_id, function(list){
       folder_name = list[0][0];
       $('.site_list').empty();
