@@ -8,22 +8,25 @@ $(function(){
   $('#Bt_Edit').on('click',function(){
       var id = getParam(0);
       var name = $('#input_name').val().trim();
+      var parent_id = getParam(2);
       dao.update(id, name, function() {
-        window.location.href = '/popup.html';
+        window.location.href = '/popup.html' + "?folder_id=" + parent_id;
       });
   });
 
   //削除
   $('#Bt_Remove').on('click',function(){
-    const idx = getParam(0);
+    const id = getParam(0);
+    var parent_id = getParam(2);
     dao.remove(idx, function() {
-      window.location.href = '/popup.html';
+      window.location.href = '/popup.html' + "?folder_id=" + parent_id;
     });
   })
 
-  // topに戻る
+  // リストに戻る
   $('#Bt_Cancel').on('click',function(){
-    window.location.href = '/popup.html';
+  var parent_id = getParam(2);
+    window.location.href = '/popup.html' + "?folder_id=" + parent_id;
   })
 
   // close
@@ -43,10 +46,13 @@ function getParam(i){
   id = params[1];
   //サイト名取得
   params = parameters[2].split("=");
-  siteName = params[1];
-  name = decodeURI(siteName);
+  rawName = params[1];
+  name = decodeURI(rawName);
 
-  var list = [id, name];
+  params = parameters[3].split("=");
+  parent_id = params[1];
+
+  var list = [id, name, parent_id];
 
   return list[i];
 }

@@ -3,14 +3,14 @@ $(function(){
     var dao = new Dao
     // console.log($('textarea[name="nanndemoii"]').val());
     var name = $('input#input_folder_title').val().trim();
-    dao.add_folder(name, getParam(0), function() {
-      window.location.href = '/popup.html';
+    dao.add_folder(name, getParam(), function() {
+      window.location.href = '/popup.html' + "?folder_id=" + getParam();
     });
   });
 
-  // topに戻る
+  // リストに戻る
   $('#Bt_Cancel').on('click',function(){
-    window.location.href = '/popup.html';
+    window.location.href = '/popup.html' + "?folder_id=" + getParam();
   });
 
   // close
@@ -20,16 +20,14 @@ $(function(){
 
 })
 
-function getParam(i) {
+function getParam() {
   var url = location.href;
   parameters = url.split("?");
   // parent_folder_id取得
   params = parameters[1].split("=");
   parent_id = params[1];
 
-  var list = [parent_id];
-
-  return list[i];
+  return parent_id;
 }
 
 var Dao = function(){
