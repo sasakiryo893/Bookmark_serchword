@@ -2,6 +2,33 @@ var domain;
 
 $(function() {
   var dao = new Dao();
+  
+  $('#Bt_Search').on('click', function () {
+    var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
+    var gParent;    //ここどうやって親取得するか考える
+
+    dao.findByFolderId_bookmarks(0, function (list) {
+      $.each(list, function (i, e) {
+        var name = e.name;
+        var searchWord = e.search_word;
+        var memo = e.memo;
+          
+        if(name.indexOf(searchText) != -1 || searchText == ""){
+          $(gParent).removeClass('hidden');
+        } else {
+          $(gParent).addClass('hidden');
+        }
+      
+        if(search_word.indexOf(searchText) != -1){
+          $(gParent).removeClass('hidden');
+        }
+      
+        if(memo.indexOf(searchText) != -1){
+          $(gParent).removeClass('hidden');
+        }
+      });
+    });
+  });
 
   $('#Bt_Search').on('click', function () {
     var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
@@ -31,46 +58,46 @@ $(function() {
   });
 
   //検索ワード検索
-    $('#Bt_Search').on('click', function () {
-        var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
-        var targetText;
-        var gParent;
+ /* $('#Bt_Search').on('click', function () {
+      var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
+      var targetText;
+      var gParent;
 
-        //タイトルと検索ワード比較
-        $('.hidden_name').each(function () {
-            targetText = $(this).text();
-            gParent = $(this).parent();
+      //タイトルと検索ワード比較
+      $('.hidden_name').each(function () {
+          targetText = $(this).text();
+          gParent = $(this).parent();
 
-            // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-            if (targetText.indexOf(searchText) != -1 || searchText == "") {
-                $(gParent).removeClass('hidden');
-            } else {
-                $(gParent).addClass('hidden');
-            }
-        });
+          // 検索対象となるリストに入力された文字列が存在するかどうかを判断
+          if (targetText.indexOf(searchText) != -1 || searchText == "") {
+              $(gParent).removeClass('hidden');
+          } else {
+              $(gParent).addClass('hidden');
+          }
+      });
 
-        //inputの中身(検索履歴ワード)と検索ワード比較
-        $('.site_list input').each(function () {
-            targetText = $(this).text(); //pの中身取得
-            gParent = $(this).parent();
+      //inputの中身(検索履歴ワード)と検索ワード比較
+      $('.site_list input').each(function () {
+          targetText = $(this).text(); //pの中身取得
+          gParent = $(this).parent();
 
-            // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-            if (targetText.indexOf(searchText) != -1) {
-                $(gParent).removeClass('hidden');
-            }
-        });
+          // 検索対象となるリストに入力された文字列が存在するかどうかを判断
+          if (targetText.indexOf(searchText) != -1) {
+              $(gParent).removeClass('hidden');
+          }
+      });
 
-        //memoの中身と検索ワード比較
-        $('.hidden_memo').each(function () {
-            targetText = $(this).text(); //pの中身取得
-            gParent = $(this).parent();
+      //memoの中身と検索ワード比較
+      $('.hidden_memo').each(function () {
+          targetText = $(this).text(); //pの中身取得
+          gParent = $(this).parent();
 
-            // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-            if (targetText.indexOf(searchText) != -1) {
-                $(gParent).removeClass('hidden');
-            }
-        });
-    });
+          // 検索対象となるリストに入力された文字列が存在するかどうかを判断
+          if (targetText.indexOf(searchText) != -1) {
+              $(gParent).removeClass('hidden');
+          }
+      });
+  });*/
 
   //Enterキーを押したら検索
   $('#Search_Word').keydown(function() {
