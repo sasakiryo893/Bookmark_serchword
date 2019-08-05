@@ -3,6 +3,33 @@ var domain;
 $(function() {
   var dao = new Dao();
 
+  $('#Bt_Search').on('click', function () {
+    var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
+    var gParent;    //ここどうやって親取得するか考える
+
+    dao.findByFolderId_bookmarks(0, function (list) {
+      $.each(list, function (i, e) {
+        var name = e.name;
+        var searchWord = e.search_word;
+        var memo = e.memo;
+
+        if(name.indexOf(searchText) != -1 || searchText == ""){
+          $(gParent).removeClass('hidden');
+        } else {
+          $(gParent).addClass('hidden');
+        }
+
+        if(search_word.indexOf(searchText) != -1){
+          $(gParent).removeClass('hidden');
+        }
+
+        if(memo.indexOf(searchText) != -1){
+          $(gParent).removeClass('hidden');
+        }
+      });
+    });
+  });
+
   //検索ワード検索
     $('#Bt_Search').on('click', function () {
         var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
@@ -98,16 +125,18 @@ $(function() {
       return;
     } else {
       dao.getFolderInfoByFolderId($('.current_folder_id').attr('id'), function(list){
-        parent_folder_name = list[0][0];
         parent_folder_id = list[0][1];
-        $('.site_list').empty();
-        $('.site_list').append(`
-          <div class="current_folder_id" id="${parent_folder_id}">
+        dao.getFolderInfoByFolderId(parent_folder_id, function(list){
+          parent_folder_name = list[0][0];
+          $('.site_list').empty();
+          $('.site_list').append(`
+            <div class="current_folder_id" id="${parent_folder_id}">
             現在のフォルダ：${parent_folder_name}
-          </div>
-        `);
+            </div>
+            `);
 
-        findByFolderId_All(parent_folder_id, dao);
+            findByFolderId_All(parent_folder_id, dao);
+        })
       });
     }
   });
@@ -247,7 +276,6 @@ String.prototype.bytes = function () {
 }
 
 var init = function(dao){
-  // TODO表の削除
   $('.site_list').empty();
   $('.site_list').append(`
     <div class="current_folder_id" id="0">
@@ -284,6 +312,7 @@ var findByFolderId_All = function(folder_id, dao){
     });
   });
 
+  //bookmarkの一覧表示
   dao.findByFolderId_bookmarks(folder_id, function(list){
     $.each(list, function(i, e){
       var url = e.url;
@@ -365,7 +394,7 @@ var Dao = function(){
     `);
   });
 
-  // フォルダー全件検索
+  // フォルダー検索
   this.findByParentId_folders = function(id, callback) {
     db.transaction(function(tx) {
       tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
@@ -384,7 +413,7 @@ var Dao = function(){
     });
   }
 
-  // ブックマーク全件検索
+  // ブックマーク検索
   this.findByFolderId_bookmarks = function(id,callback) {
     db.transaction(function(tx) {
       tx.executeSql('select * from bookmarks where folder_id = ? order by id desc', [id],
@@ -440,18 +469,24 @@ var Dao = function(){
   }
 
   this.getFolderInfoByFolderId = function(folder_id, callback){
-    db.transaction(function(tx){
-      tx.executeSql('select name, parent_id from folders where id=?', [folder_id],
-      function(tx, results){
-        var list = [];
-        for (var i = 0; i < results.rows.length; i++) {
-          list.push([
-            results.rows.item(i).name,
-            results.rows.item(i).parent_id
-          ]);
-        }
-        callback(list);
+    var list = [];
+    if(folder_id == 0){
+      list.push([
+        "root", 0
+      ]);
+      callback(list);
+    } else {
+      db.transaction(function(tx){
+        tx.executeSql('select name, parent_id from folders where id=?', [folder_id],
+          function(tx, results){
+              list.push([
+                results.rows.item(0).name,
+                results.rows.item(0).parent_id
+              ]);
+            callback(list);
+          });
       });
-    });
+    }
   }
+
 }
