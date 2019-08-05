@@ -11,26 +11,29 @@ $(function(){
       var url = getParam(2).trim();
       var word = $('input#search_word').val().trim();
       var memo = $('textarea#input_memo').val().trim();
-      dao.update(id, site, url, word, memo, function() {
-        window.location.href = '/popup.html';
+      var folder_id = getParam(5);
+      dao.update(id, site, url, word, memo, function(){
+        window.location.href = '/popup.html' + "?folder_id=" + folder_id;
       });
   });
 
   //削除
-  $('#Bt_Remove').on('click',function(){
-    const idx = getParam(0);
-    dao.remove(idx, function() {
-      window.location.href = '/popup.html';
+  $('#Bt_Remove').on('click', function(){
+    const id = getParam(0);
+    var folder_id = getParam(5);
+    dao.remove(id, function() {
+      window.location.href = '/popup.html' + "?folder_id=" + folder_id;
     });
   })
 
-  // topに戻る
-  $('#Bt_Cancel').on('click',function(){
-    window.location.href = '/popup.html';
+  // リストに戻る
+  $('#Bt_Cancel').on('click', function(){
+  var folder_id = getParam(5);
+    window.location.href = '/popup.html' + "?folder_id=" + folder_id;
   })
 
   // close
-  $('.close').on('click',function(){
+  $('.close').on('click', function(){
     window.close();
   })
 
@@ -62,7 +65,10 @@ function getParam(i){
   decodeWord = params[1];
   word = decodeURI(decodeWord);
 
-  var list = [id, name, url, memo, word];
+  params = parameters[6].split("=");
+  folder_id = params[1];
+
+  var list = [id, name, url, memo, word, folder_id];
 
   return list[i];
 }

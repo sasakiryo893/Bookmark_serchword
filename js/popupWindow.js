@@ -44,16 +44,17 @@ $(function(){
       var url = tab.url;
       var word = $('select#search_word').val();
       var memo = $('textarea#input_memo').val().trim();
-      var folder_id = getParam(0);
+      var folder_id = getParam();
       dao.add_bookmark(site, url, word, memo, folder_id, function() {
-        window.location.href = '/popup.html' + "?folder_id=" + getParam(0);
+        window.location.href = '/popup.html' + "?folder_id=" + folder_id;
       });
     });
   });
 
   // topに戻る
   $('#Bt_Cancel').on('click',function(){
-    window.location.href = '/popup.html' + "?folder_id=" + getParam(0);
+  var folder_id = getParam();
+    window.location.href = '/popup.html' + "?folder_id=" + folder_id;
   })
 
   // close
@@ -62,16 +63,14 @@ $(function(){
   })
 });
 
-function getParam(i) {
+function getParam() {
   var url = location.href;
   parameters = url.split("?");
   // current_folder_id取得
   params = parameters[1].split("=");
   folder_id = params[1];
 
-  var list = [folder_id];
-
-  return list[i];
+  return folder_id;
 }
 
 var Dao = function(){
