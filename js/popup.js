@@ -1,103 +1,78 @@
 var domain;
 
 $(function() {
+  $("#sortableArea").sortable();
+});
+
+$(function() {
   var dao = new Dao();
   
   $('#Bt_Search').on('click', function () {
     var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
     var gParent;    //ここどうやって親取得するか考える
 
-    dao.findByFolderId_bookmarks(0, function (list) {
-      $.each(list, function (i, e) {
-        var name = e.name;
-        var searchWord = e.search_word;
-        var memo = e.memo;
-          
-        if(name.indexOf(searchText) != -1 || searchText == ""){
-          $(gParent).removeClass('hidden');
-        } else {
-          $(gParent).addClass('hidden');
-        }
-      
-        if(search_word.indexOf(searchText) != -1){
-          $(gParent).removeClass('hidden');
-        }
-      
-        if(memo.indexOf(searchText) != -1){
-          $(gParent).removeClass('hidden');
-        }
+    $('.site_info').remove();   //現在表示しているブックマークの削除
+    $('.folder_name').remove(); //現在表示しているフォルダの削除
+
+    if( searchText == "" ){
+        var currentFolderId = $('.current_folder_id').attr('id');
+        findByFolderId_All(currentFolderId, dao);
+    } else {
+      dao.findAll_bookmarks(function (list) {
+        $.each(list, function (i, e) {
+          var name = e.name;
+          var searchWord = e.search_word;
+          var memo = e.memo;
+
+          if(name.indexOf(searchText) != -1 || searchWord.indexOf(searchText) != -1 ||
+            memo.indexOf(searchText) != -1 ){
+            domain = e.url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
+            if(domain != null){
+              domain = "http://www.google.com/s2/favicons?domain=" + domain[0];
+            } else {
+              domain = "http://www.google.com/s2/favicons?domain=" + domain;
+            }
+            $('.site_list').append(`
+              <div class="site_info choice">
+                <div class="site_title">
+                  <div class="favicon-image-box">
+                  <img src=${domain} width=10 height=10>
+                </div>
+                <p>${e.name}</p>
+              </div>
+              <div class="site_search_word hidden">
+                <img src="resources/search_word.png" alt="" class="glass">
+                <div class="container-fluid mx-0">
+                  <div class="form-group row">
+                     <p class="form-control border border-info col-10 input-sm" type="text">${search_word}</p>
+                      <button type="button" class="btn btn-info col copy-btn" data-toggle="tooltip" data-placement="top" title="コピーする">
+                          <i class="fas fa-clipboard"></i>
+                      </button>
+                   </div>
+                 </div>
+               </div>
+               <div class="hidden_url" style="display:none">
+                 ${e.url}
+               </div>
+               <div class="hidden_id" style="display:none">
+                 ${e.id}
+               </div>
+               <div class="hidden_name" style="display:none">
+                 ${e.name}
+               </div>
+               <div class="hidden_word" style="display:none">
+                 ${e.search_word}
+               </div>
+               <div class="hidden_memo" style="display:none">
+                 ${e.memo}
+               </div>
+             </div>
+            `);
+           }
+        });
       });
-    });
+    }
   });
-
-  $('#Bt_Search').on('click', function () {
-    var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
-    var gParent;    //ここどうやって親取得するか考える
-
-    dao.findByFolderId_bookmarks(0, function (list) {
-      $.each(list, function (i, e) {
-        var name = e.name;
-        var searchWord = e.search_word;
-        var memo = e.memo;
-
-        if(name.indexOf(searchText) != -1 || searchText == ""){
-          $(gParent).removeClass('hidden');
-        } else {
-          $(gParent).addClass('hidden');
-        }
-
-        if(search_word.indexOf(searchText) != -1){
-          $(gParent).removeClass('hidden');
-        }
-
-        if(memo.indexOf(searchText) != -1){
-          $(gParent).removeClass('hidden');
-        }
-      });
-    });
-  });
-
-  //検索ワード検索
- /* $('#Bt_Search').on('click', function () {
-      var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
-      var targetText;
-      var gParent;
-
-      //タイトルと検索ワード比較
-      $('.hidden_name').each(function () {
-          targetText = $(this).text();
-          gParent = $(this).parent();
-
-          // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-          if (targetText.indexOf(searchText) != -1 || searchText == "") {
-              $(gParent).removeClass('hidden');
-          } else {
-              $(gParent).addClass('hidden');
-          }
-      });
-
-      //inputの中身(検索履歴ワード)と検索ワード比較
-      $('.site_list input').each(function () {
-          targetText = $(this).text(); //pの中身取得
-          gParent = $(this).parent();
-
-          // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-          if (targetText.indexOf(searchText) != -1) {
-              $(gParent).removeClass('hidden');
-          }
-      });
-
-      //memoの中身と検索ワード比較
-      $('.hidden_memo').each(function () {
-          targetText = $(this).text(); //pの中身取得
-          gParent = $(this).parent();
-
-          // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-          if (targetText.indexOf(searchText) != -1) {
-              $(gParent).removeClass('hidden');
-          }
-      });
-  });*/
 
   //Enterキーを押したら検索
   $('#Search_Word').keydown(function() {
@@ -479,10 +454,30 @@ var Dao = function(){
     });
   }
 
-  // ブックマーク検索
+  // フォルダー内のブックマーク全件検索
   this.findByFolderId_bookmarks = function(id,callback) {
     db.transaction(function(tx) {
       tx.executeSql('select * from bookmarks where folder_id = ? order by id desc', [id],
+        function(tx, results) {
+          var list = [];
+          for (i = 0; i < results.rows.length; i++){
+            list.push({
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              url: results.rows.item(i).url,
+              search_word: results.rows.item(i).search_word,
+              memo: results.rows.item(i).memo
+            });
+          }
+          callback(list);
+        });
+    });
+  }
+  
+  // 全ブックマーク全件検索
+  this.findAll_bookmarks = function(callback) {
+    db.transaction(function(tx) {
+      tx.executeSql('select * from bookmarks', [],
         function(tx, results) {
           var list = [];
           for (i = 0; i < results.rows.length; i++){
