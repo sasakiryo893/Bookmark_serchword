@@ -1,5 +1,6 @@
 .site_info{
   padding: 5px;
+
 }
 
 ul {
@@ -24,10 +25,12 @@ img.glass {
 }
 
 .choice{
-  border-left: solid 6px #1fa67a;/*¶‘¤‚Ìü*/
-  /*border-bottom: solid 2px #dadada;/*‰º‚ÉŠDFü*/
+  border-left: solid 6px #1fa67a;/*ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½*/
+  border-bottom: solid 4px #FFFFFF;
+  /*border-bottom: solid 2px #dadada;/*ï¿½ï¿½ï¿½ÉŠDï¿½Fï¿½ï¿½*/
   background: whitesmoke;
-  margin-bottom: 4px;/*‰º‚Ìƒo[‚Æ‚Ì—]”’*/
+  margin-bottom: 0px;/*ï¿½ï¿½ï¿½Ìƒoï¿½[ï¿½Æ‚Ì—]ï¿½ï¿½*/
+  padding-bottom: 4px;
   line-height: 1.5;
 }
 
