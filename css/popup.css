@@ -24,10 +24,11 @@ img.glass {
 }
 
 .choice{
-  border-left: solid 6px #1fa67a;/*¶‘¤‚Ìü*/
-  /*border-bottom: solid 2px #dadada;/*‰º‚ÉŠDFü*/
+  outline: solid 1px white;
+  padding-bottom: 4px;
+  border-left: solid 6px #1fa67a;/*ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½*/
+  /*border-bottom: solid 2px #dadada;/*ï¿½ï¿½ï¿½ÉŠDï¿½Fï¿½ï¿½*/
   background: whitesmoke;
-  margin-bottom: 4px;/*‰º‚Ìƒo[‚Æ‚Ì—]”’*/
   line-height: 1.5;
 }
 
