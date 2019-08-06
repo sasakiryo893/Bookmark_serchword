@@ -4,6 +4,8 @@ $(function(){
   chrome.tabs.getSelected(null, function(tab) {
   });
 
+  $('#input_name').focus();
+
   // 編集登録
   $('#Bt_Edit').on('click',function(){
       var id = getParam(0);

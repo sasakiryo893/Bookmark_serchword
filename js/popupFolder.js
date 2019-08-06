@@ -1,4 +1,5 @@
 $(function(){
+  $('input#input_folder_title').focus();
   $('#Bt_Regi').on('click',function(){
     var dao = new Dao
     // console.log($('textarea[name="nanndemoii"]').val());
