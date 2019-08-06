@@ -412,9 +412,6 @@ var Dao = function(){
   // テーブル作成
   db.transaction(function(tx) {
     tx.executeSql(`
-      PRAGMA foreign_keys=true
-      `);
-    tx.executeSql(`
       create table if not exists folders (
         id integer primary key autoincrement,
         name varchar(300) not null,
@@ -428,9 +425,7 @@ var Dao = function(){
         url varchar(2083) not null,
         search_word varchar(100) null,
         memo text null,
-        folder_id integer default 0,
-        foreign key (folder_id) references folders(id)
-        on delete cascade on update cascade
+        folder_id integer default 0
       )
     `);
   });
