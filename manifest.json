@@ -10,5 +10,7 @@
   },
   "manifest_version": 2,
 
-  "permissions": ["tabs","history","bookmarks"]
+  "permissions": ["tabs","history","bookmarks"],
+
+  "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'"
 }

@@ -1,49 +1,78 @@
 var domain;
 
 $(function() {
+  $("#sortableArea").sortable();
+});
+
+$(function() {
   var dao = new Dao();
+  
+  $('#Bt_Search').on('click', function () {
+    var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
+    var gParent;    //ここどうやって親取得するか考える
 
-  //検索ワード検索
-    $('#Bt_Search').on('click', function () {
-        var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
-        var targetText;
-        var gParent;
+    $('.site_info').remove();   //現在表示しているブックマークの削除
+    $('.folder_name').remove(); //現在表示しているフォルダの削除
 
-        //タイトルと検索ワード比較
-        $('.hidden_name').each(function () {
-            targetText = $(this).text();
-            gParent = $(this).parent();
+    if( searchText == "" ){
+        var currentFolderId = $('.current_folder_id').attr('id');
+        findByFolderId_All(currentFolderId, dao);
+    } else {
+      dao.findAll_bookmarks(function (list) {
+        $.each(list, function (i, e) {
+          var name = e.name;
+          var searchWord = e.search_word;
+          var memo = e.memo;
 
-            // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-            if (targetText.indexOf(searchText) != -1 || searchText == "") {
-                $(gParent).removeClass('hidden');
+          if(name.indexOf(searchText) != -1 || searchWord.indexOf(searchText) != -1 ||
+            memo.indexOf(searchText) != -1 ){
+            domain = e.url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
+            if(domain != null){
+              domain = "http://www.google.com/s2/favicons?domain=" + domain[0];
             } else {
-                $(gParent).addClass('hidden');
+              domain = "http://www.google.com/s2/favicons?domain=" + domain;
             }
+            $('.site_list').append(`
+              <div class="site_info choice">
+                <div class="site_title">
+                  <div class="favicon-image-box">
+                  <img src=${domain} width=10 height=10>
+                </div>
+                <p>${e.name}</p>
+              </div>
+              <div class="site_search_word hidden">
+                <img src="resources/search_word.png" alt="" class="glass">
+                <div class="container-fluid mx-0">
+                  <div class="form-group row">
+                     <p class="form-control border border-info col-10 input-sm" type="text">${search_word}</p>
+                      <button type="button" class="btn btn-info col copy-btn" data-toggle="tooltip" data-placement="top" title="コピーする">
+                          <i class="fas fa-clipboard"></i>
+                      </button>
+                   </div>
+                 </div>
+               </div>
+               <div class="hidden_url" style="display:none">
+                 ${e.url}
+               </div>
+               <div class="hidden_id" style="display:none">
+                 ${e.id}
+               </div>
+               <div class="hidden_name" style="display:none">
+                 ${e.name}
+               </div>
+               <div class="hidden_word" style="display:none">
+                 ${e.search_word}
+               </div>
+               <div class="hidden_memo" style="display:none">
+                 ${e.memo}
+               </div>
+             </div>
+            `);
+           }
         });
-
-        //inputの中身(検索履歴ワード)と検索ワード比較
-        $('.site_list input').each(function () {
-            targetText = $(this).text(); //pの中身取得
-            gParent = $(this).parent();
-
-            // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-            if (targetText.indexOf(searchText) != -1) {
-                $(gParent).removeClass('hidden');
-            }
-        });
-
-        //memoの中身と検索ワード比較
-        $('.hidden_memo').each(function () {
-            targetText = $(this).text(); //pの中身取得
-            gParent = $(this).parent();
-
-            // 検索対象となるリストに入力された文字列が存在するかどうかを判断
-            if (targetText.indexOf(searchText) != -1) {
-                $(gParent).removeClass('hidden');
-            }
-        });
-    });
+      });
+    }
+  });
 
   //Enterキーを押したら検索
   $('#Search_Word').keydown(function() {
@@ -93,12 +122,40 @@ $(function() {
     window.location.href = '/popupFolder.html' + "?folder_id=" + $('.current_folder_id').attr('id');
   });
 
+  $('#Bt_Go_Back').on('click', function(){
+    if($('.current_folder_id').attr('id') == 0){
+      return;
+    } else {
+      dao.getFolderInfoByFolderId($('.current_folder_id').attr('id'), function(list){
+        parent_folder_id = list[0][1];
+        dao.getFolderInfoByFolderId(parent_folder_id, function(list){
+          parent_folder_name = list[0][0];
+          $('.site_list').empty();
+          $('.site_list').append(`
+            <div class="current_folder_id" id="${parent_folder_id}">
+              現在のフォルダ：${parent_folder_name}
+            </div>
+          `);
 
+            findByFolderId_All(parent_folder_id, dao);
+        })
+      });
+    }
+  });
+
+  $('#Bt_Go_Root').on('click', function(){
+    $('.site_list').empty();
+    $('.site_list').append(`
+      <div class="current_folder_id" id="0">
+        現在のフォルダ：root
+      </div>
+    `);
+
+    findByFolderId_All(0, dao);
+  });
 
   init(dao);
 });
-
-
 
 function exportTSV(array) {
     // 文字化け対策
@@ -199,12 +256,10 @@ $(document).on('mouseover','.site_info',function(){
 
 });
 
-$(document).on('mouseout','.site_info',function(){
-    $(this).css('background', '');
-    $(this).find('p:last').remove();
-
-    $(this).children('.site_search_word').addClass('hidden');
-    $(this).children('.site_url').addClass('hidden');
+$(document).on('contextmenu','.folder_name',function(){
+  window.location.href = '/popupFolderEdit.html' + "?id=" +  $(this).attr('id').trim()
+                                                 + "?name=" + $(this).html().trim()
+                                                 + "?folder_id=" + $('.current_folder_id').attr('id');
 });
 
 $(document).on('contextmenu','.site_info',function(){
@@ -212,20 +267,78 @@ $(document).on('contextmenu','.site_info',function(){
                                            + "?site=" + $(this).children('.hidden_name').text().trim()
                                            + "?url=" + $(this).children('.hidden_url').text().trim()
                                            + "?memo=" + $(this).children('.hidden_memo').text().trim()
-                                           + "?word=" + $(this).children('.hidden_word').text().trim();
+                                           + "?word=" + $(this).children('.hidden_word').text().trim()
+                                           + "?folder_id=" + $('.current_folder_id').attr('id');
 });
 
+$(document).on('mouseout','.site_info',function(){
+  $(this).css('background', '');
+  $(this).find('p:last').remove();
+
+  $(this).children('.site_search_word').addClass('hidden');
+  $(this).children('.site_url').addClass('hidden');
+});
 
 String.prototype.bytes = function () {
   return(encodeURIComponent(this).replace(/%../g,"x").length);
 }
 
-var init = function(dao){
-  // TODO表の削除
-  $('.site_list').empty();
+function getParam() {
+  var url = location.href;
+  parameters = url.split("?");
 
+  if(parameters[1] == null) {
+    pre_folder_id = 0;
+  } else {
+    params = parameters[1].split("=");
+    pre_folder_id = params[1];
+  }
+
+  return pre_folder_id;
+}
+
+var init = function(dao){
+  pre_folder_id = getParam();
+  if(pre_folder_id == 0){
+    $('.site_list').empty();
+    $('.site_list').append(`
+      <div class="current_folder_id" id="0">
+        現在のフォルダ：root
+      </div>
+    `);
+    findByFolderId_All(0, dao);
+  } else {
+    dao.getFolderInfoByFolderId(pre_folder_id, function(list){
+      folder_name = list[0][0];
+      $('.site_list').empty();
+      $('.site_list').append(`
+        <div class="current_folder_id" id="${pre_folder_id}">
+          現在のフォルダ：${folder_name}
+        </div>
+      `);
+
+        findByFolderId_All(pre_folder_id, dao);
+    });
+  }
+
+
+  $(document).on('click','.folder_name',function(){
+    var current_folder_id = $(this).attr('id');
+    var current_folder_name = $(this).html();
+    $('.site_list').empty();
+    $('.site_list').append(`
+      <div class="current_folder_id" id="${current_folder_id}">
+        現在のフォルダ：${current_folder_name}
+      </div>
+    `);
+
+    findByFolderId_All(current_folder_id, dao);
+  });
+}
+
+var findByFolderId_All = function(folder_id, dao){
   // //folderの一覧表示
-  dao.findByParentId_folders(0,function(list){
+  dao.findByParentId_folders(folder_id, function(list){
     $.each(list, function(i, e){
       $('.site_list').append(`
         <div class="folder_name" id="${e.id}">
@@ -235,7 +348,8 @@ var init = function(dao){
     });
   });
 
-  dao.findByFolderId_bookmarks(0, function(list){
+  //bookmarkの一覧表示
+  dao.findByFolderId_bookmarks(folder_id, function(list){
     $.each(list, function(i, e){
       var url = e.url;
       domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
@@ -286,78 +400,6 @@ var init = function(dao){
       `);
     });
   });
-
-  $(document).on('click','.folder_name',function(){
-    $('.site_list').empty();
-
-    var current_folder_id = $(this).attr('id');
-    var current_folder_name = $(this).html();
-    $('.site_list').append(`
-      <div class="current_folder_id" id="${current_folder_id}">
-        現在のフォルダ：${current_folder_name}
-      </div>
-      `);
-
-    dao.findByParentId_folders(current_folder_id, function(list){
-      $.each(list, function(i, e){
-        $('.site_list').append(`
-              <div class="folder_name" id="${e.id}">${e.name}</div>
-          `);
-      });
-    });
-
-    dao.findByFolderId_bookmarks(current_folder_id, function(list){
-      $.each(list, function(i, e){
-        var url = e.url;
-        domain = url.match(/^https?:\/{2,}(.*?)(?:\/|\?|#|$)/);
-        if(domain != null){
-          domain = "http://www.google.com/s2/favicons?domain=" + domain[0];
-        } else {
-          domain = "http://www.google.com/s2/favicons?domain=" + domain;
-        }
-        console.log(domain);
-        if(e.search_word == "") search_word = ""
-        else search_word = e.search_word
-
-        $('.site_list').append(`
-          <div class="site_info choice">
-            <div class="site_title">
-              <div class="favicon-image-box">
-              <img src=${domain} width=10 height=10>
-              </div>
-              <p>${e.name}</p>
-            </div>
-            <div class="site_search_word hidden">
-              <img src="resources/search_word.png" alt="" class="glass">
-              <div class="container-fluid mx-0">
-                  <div class="form-group row">
-                     <p class="form-control border border-info col-10 input-sm" type="text">${search_word}</p>
-                      <button type="button" class="btn btn-info col copy-btn" data-toggle="tooltip" data-placement="top" title="コピーする">
-                          <i class="fas fa-clipboard"></i>
-                      </button>
-                  </div>
-              </div>
-            </div>
-            <div class="hidden_url" style="display:none">
-              ${e.url}
-            </div>
-            <div class="hidden_id" style="display:none">
-              ${e.id}
-            </div>
-            <div class="hidden_name" style="display:none">
-              ${e.name}
-            </div>
-            <div class="hidden_word" style="display:none">
-              ${e.search_word}
-            </div>
-            <div class="hidden_memo" style="display:none">
-              ${e.memo}
-            </div>
-          </div>
-        `);
-      });
-    });
-  });
 }
 
 var Dao = function(){
@@ -370,6 +412,13 @@ var Dao = function(){
   // テーブル作成
   db.transaction(function(tx) {
     tx.executeSql(`
+      create table if not exists folders (
+        id integer primary key autoincrement,
+        name varchar(300) not null,
+        parent_id integer default 0
+      )
+      `);
+    tx.executeSql(`
       create table if not exists bookmarks (
         id integer primary key autoincrement,
         name varchar(300) not null,
@@ -379,16 +428,9 @@ var Dao = function(){
         folder_id integer default 0
       )
     `);
-    tx.executeSql(`
-      create table if not exists folders (
-        id integer primary key autoincrement,
-        name varchar(300) not null,
-        parent_id integer default 0
-      )
-    `);
   });
 
-  // フォルダー全件検索
+  // フォルダー検索
   this.findByParentId_folders = function(id, callback) {
     db.transaction(function(tx) {
       tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
@@ -407,10 +449,30 @@ var Dao = function(){
     });
   }
 
-  // ブックマーク全件検索
+  // フォルダー内のブックマーク全件検索
   this.findByFolderId_bookmarks = function(id,callback) {
     db.transaction(function(tx) {
       tx.executeSql('select * from bookmarks where folder_id = ? order by id desc', [id],
+        function(tx, results) {
+          var list = [];
+          for (i = 0; i < results.rows.length; i++){
+            list.push({
+              id: results.rows.item(i).id,
+              name: results.rows.item(i).name,
+              url: results.rows.item(i).url,
+              search_word: results.rows.item(i).search_word,
+              memo: results.rows.item(i).memo
+            });
+          }
+          callback(list);
+        });
+    });
+  }
+  
+  // 全ブックマーク全件検索
+  this.findAll_bookmarks = function(callback) {
+    db.transaction(function(tx) {
+      tx.executeSql('select * from bookmarks', [],
         function(tx, results) {
           var list = [];
           for (i = 0; i < results.rows.length; i++){
@@ -457,8 +519,37 @@ var Dao = function(){
 
   //登録
   this.insert = function(site, url, word, memo){
-    db.transaction(function (tx){
+    db.transaction(function(tx){
       tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
     });
   }
+
+  this.getFolderInfoByFolderId = function(folder_id, callback){
+    var list = [];
+    if(folder_id == 0){
+      list.push([
+        "root", 0
+      ]);
+      callback(list);
+    } else {
+      db.transaction(function(tx){
+        tx.executeSql('select name, parent_id from folders where id=?', [folder_id],
+          function(tx, results){
+              list.push([
+                results.rows.item(0).name,
+                results.rows.item(0).parent_id
+              ]);
+            callback(list);
+          });
+      });
+    }
+  }
+
+  this.deleteAllTables = function(){
+    db.transaction(function(tx){
+      tx.executeSql('drop table bookmarks');
+      tx.executeSql('drop table folders');
+    })
+  }
+
 }

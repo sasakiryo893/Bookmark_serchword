@@ -25,12 +25,11 @@ img.glass {
 }
 
 .choice{
+  outline: solid 1px white;
+  padding-bottom: 4px;
   border-left: solid 6px #1fa67a;/*�����̐�*/
-  border-bottom: solid 4px #FFFFFF;
   /*border-bottom: solid 2px #dadada;/*���ɊD�F��*/
   background: whitesmoke;
-  margin-bottom: 0px;/*���̃o�[�Ƃ̗]��*/
-  padding-bottom: 4px;
   line-height: 1.5;
 }
 
