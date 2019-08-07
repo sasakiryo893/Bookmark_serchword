@@ -20,14 +20,13 @@ $(function(){
   $('#Bt_Remove').on('click',function(){
     const id = getParam(0);
     var parent_id = getParam(2);
-    dao.remove(id, function() {
-      window.location.href = '/popup.html' + "?folder_id=" + parent_id;
-    });
+
+    deleteByfolderId_All(id, dao);
   })
 
   // リストに戻る
   $('#Bt_Cancel').on('click',function(){
-  var parent_id = getParam(2);
+    var parent_id = getParam(2);
     window.location.href = '/popup.html' + "?folder_id=" + parent_id;
   })
 
@@ -59,6 +58,17 @@ function getParam(i){
   return list[i];
 }
 
+function deleteByfolderId_All(id, dao){
+  dao.deleteByFolderId_bookmarks(id);
+  dao.listupByParentFolderId_folders(id, function(list){
+    if(list[0] != null){
+      for (var i = 0; i < list.length; i++) {
+        deleteByfolderId_All(list[i], dao);
+    }}
+    dao.deleteById_folder(id);
+  });
+}
+
 var Dao = function(){
   var name = 'localdb';
   var version = '1.0';
@@ -74,13 +84,31 @@ var Dao = function(){
     });
   }
 
-  // 削除
-  this.remove = function(id, callback){
-    db.transaction(function (tx){
-      tx.executeSql('delete from folders where id=?', [id]);
-      callback();
+  this.deleteByFolderId_bookmarks = function(id){
+    db.transaction(function(tx){
+      tx.executeSql(`delete from bookmarks where folder_id=?`, [id])
     });
   }
 
+  this.deleteById_folder = function(id){
+    db.transaction(function(tx){
+      tx.executeSql(`delete from folders where id=?`, [id])
+    });
+  }
 
+  this.listupByParentFolderId_folders = function(id, callback){
+    db.transaction(function(tx){
+      tx.executeSql(`select id from folders where parent_id=?`, [id],
+        function(tx, results){
+          var list = [];
+          if(results.rows.length > 0){
+            for (var i = 0; i < results.rows.length; i++) {
+              list.push([
+                results.rows.item(i).id
+              ]);
+          }}
+          callback(list);
+      });
+    });
+  }
 }
