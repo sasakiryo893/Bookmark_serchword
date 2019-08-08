@@ -69,35 +69,36 @@ function deleteByfolderId_All(id, dao){
   });
 }
 
-var Dao = function(){
+var Dao = function() {
   var name = 'localdb';
   var version = '1.0';
   var description = 'Web SQL Database';
   var size = 5 * 1024 * 1024;
-  var db = openDatabase(name, version, description, size);
+  this.db = openDatabase(name, version, description, size);
+}
 
-  // 編集保存
-  this.update = function(id, name, callback){
-    db.transaction(function (tx){
+Dao.prototype = {
+  update: function(id, name, callback) {
+    this.db.transaction(function(tx) {
       tx.executeSql('update folders SET name=? WHERE id=?', [name, id]);
       callback();
     });
-  }
+  },
 
-  this.deleteByFolderId_bookmarks = function(id){
-    db.transaction(function(tx){
+  deleteByFolderId_bookmarks: function(id) {
+    this.db.transaction(function(tx) {
       tx.executeSql(`delete from bookmarks where folder_id=?`, [id])
     });
-  }
+  },
 
-  this.deleteById_folder = function(id){
-    db.transaction(function(tx){
+  deleteById_folder: function(id) {
+    this.db.transaction(function(tx) {
       tx.executeSql(`delete from folders where id=?`, [id])
     });
-  }
+  },
 
-  this.listupByParentFolderId_folders = function(id, callback){
-    db.transaction(function(tx){
+  listupByParentFolderId_folders: function(id, callback) {
+    this.db.transaction(function(tx) {
       tx.executeSql(`select id from folders where parent_id=?`, [id],
         function(tx, results){
           var list = [];
