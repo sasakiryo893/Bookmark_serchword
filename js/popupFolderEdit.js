@@ -1,4 +1,4 @@
-$(function(){
+$(function() {
   var dao = new Dao();
   // サイト名を取得
   chrome.tabs.getSelected(null, function(tab) {
@@ -7,7 +7,7 @@ $(function(){
   $('#input_name').focus();
 
   // 編集登録
-  $('#Bt_Edit').on('click',function(){
+  $('#Bt_Edit').on('click',function() {
       var id = getParam(0);
       var name = $('#input_name').val().trim();
       var parent_id = getParam(2);
@@ -17,21 +17,21 @@ $(function(){
   });
 
   //削除
-  $('#Bt_Remove').on('click',function(){
+  $('#Bt_Remove').on('click',function() {
     const id = getParam(0);
     var parent_id = getParam(2);
 
-    deleteByfolderId_All(id, dao);
+    deleteByfolderId_all(id, dao);
   })
 
   // リストに戻る
-  $('#Bt_Cancel').on('click',function(){
+  $('#Bt_Cancel').on('click',function() {
     var parent_id = getParam(2);
     window.location.href = '/popup.html' + "?folder_id=" + parent_id;
   })
 
   // close
-  $('.close').on('click',function(){
+  $('.close').on('click',function() {
     window.close();
   })
 
@@ -49,7 +49,7 @@ function getParam(i){
   params = parameters[2].split("=");
   rawName = params[1];
   name = decodeURI(rawName);
-
+  //元いたフォルダid取得
   params = parameters[3].split("=");
   parent_id = params[1];
 
@@ -58,12 +58,12 @@ function getParam(i){
   return list[i];
 }
 
-function deleteByfolderId_All(id, dao){
+function deleteByfolderId_all(id, dao) {
   dao.deleteByFolderId_bookmarks(id);
-  dao.listupByParentFolderId_folders(id, function(list){
-    if(list[0] != null){
+  dao.listupByParentFolderId_folders(id, function(list) {
+    if (list[0] != null) {
       for (var i = 0; i < list.length; i++) {
-        deleteByfolderId_All(list[i], dao);
+        deleteByfolderId_all(list[i], dao);
     }}
     dao.deleteById_folder(id);
   });
@@ -100,9 +100,9 @@ Dao.prototype = {
   listupByParentFolderId_folders: function(id, callback) {
     this.db.transaction(function(tx) {
       tx.executeSql(`select id from folders where parent_id=?`, [id],
-        function(tx, results){
+        function(tx, results) {
           var list = [];
-          if(results.rows.length > 0){
+          if (results.rows.length > 0) {
             for (var i = 0; i < results.rows.length; i++) {
               list.push([
                 results.rows.item(i).id
