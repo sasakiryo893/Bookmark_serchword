@@ -6,10 +6,9 @@ $(function() {
 
 $(function() {
   var dao = new Dao();
-  
+
   $('#Bt_Search').on('click', function () {
     var searchText = $('#Search_Word').val(); // 検索ボックスに入力された値
-    var gParent;    //ここどうやって親取得するか考える
 
     $('.site_info').remove();   //現在表示しているブックマークの削除
     $('.folder_name').remove(); //現在表示しているフォルダの削除
@@ -88,9 +87,10 @@ $(function() {
 
   //書き出し
   $('#Bt_Export').on('click', function(){
-    dao.exportArray(function(array) {
-      exportTSV(array);
-    });
+    // dao.exportArray(function(array) {
+    //   exportTSV(array);
+    // });
+    dao.deleteAllTables();
   });
 
   //読み込み
@@ -103,18 +103,28 @@ $(function() {
 
   //ブックマークからのインポート
   $('#Bt_Add_bookmark').on('click',function(){
+    let folderId = 0;
     chrome.bookmarks.getTree(function(roots){
       roots.forEach(parser);
       function parser(node){
         if (node.children) {
-          //今は分解して一個ずつインポートしてる
-          //フォルダ作成後その処理もってきて修正
-          node.children.forEach(parser);
+          new Promise(function(resove){
+            if(node.title !== ""){
+              dao.add_folder(node.title,folderId,function(id){
+                folderId = id;
+                resove(id);
+              });
+            } else {
+              node.children.forEach(parser);
+            }
+          }).then(function(folderId){
+            node.children.forEach(parser);
+          })
         } else if(node) {
-          dao.insert(node.title,node.url,"","");
+          dao.insert(node.title,node.url,"","",folderId);
         }
       }
-      init(dao);
+      findByFolderId_All(0, dao);
     });
   })
 
@@ -358,7 +368,7 @@ var findByFolderId_All = function(folder_id, dao){
       } else {
         domain = "http://www.google.com/s2/favicons?domain=" + domain;
       }
-      console.log(domain);
+
       if(e.search_word == "") search_word = ""
       else search_word = e.search_word
 
@@ -443,7 +453,6 @@ var Dao = function(){
               parent_id: results.rows.item(i).parent_id
             });
           }
-          console.log(list);
           callback(list);
         });
     });
@@ -468,7 +477,7 @@ var Dao = function(){
         });
     });
   }
-  
+
   // 全ブックマーク全件検索
   this.findAll_bookmarks = function(callback) {
     db.transaction(function(tx) {
@@ -518,9 +527,9 @@ var Dao = function(){
   }
 
   //登録
-  this.insert = function(site, url, word, memo){
+  this.insert = function(site, url, word, memo, folderId){
     db.transaction(function(tx){
-      tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [site, url, word, memo]);
+      tx.executeSql('insert into bookmarks (name, url, search_word, memo, folder_id) values (?, ?, ?, ?, ?)', [site, url, word, memo, folderId]);
     });
   }
 
@@ -550,6 +559,17 @@ var Dao = function(){
       tx.executeSql('drop table bookmarks');
       tx.executeSql('drop table folders');
     })
+  }
+
+  this.add_folder = function(name, parent_id, callback){
+    db.transaction(function(tx){
+      tx.executeSql('insert into folders (name, parent_id) values (?, ?)', [name, parent_id],
+      function(transaction, result) {
+              callback(result.insertId);
+          }, function() {
+              alert("DB SELECT Error!");
+          });
+    });
   }
 
 }
