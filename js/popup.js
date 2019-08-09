@@ -87,10 +87,10 @@ $(function() {
 
   //書き出し
   $('#Bt_Export').on('click', function(){
-    // dao.exportArray(function(array) {
-    //   exportTSV(array);
-    // });
-    dao.deleteAllTables();
+     dao.exportArray(function(array) {
+       exportTSV(array);
+     });
+    //dao.deleteAllTables();
   });
 
   //読み込み
@@ -347,7 +347,6 @@ var init = function(dao){
 }
 
 var findByFolderId_All = function(folder_id, dao){
-  // //folderの一覧表示
   dao.findByParentId_folders(folder_id, function(list){
     $.each(list, function(i, e){
       $('.site_list').append(`
@@ -358,7 +357,6 @@ var findByFolderId_All = function(folder_id, dao){
     });
   });
 
-  //bookmarkの一覧表示
   dao.findByFolderId_bookmarks(folder_id, function(list){
     $.each(list, function(i, e){
       var url = e.url;
@@ -417,10 +415,9 @@ var Dao = function(){
   var version = '1.0';
   var description = 'Web SQL Database';
   var size = 5 * 1024 * 1024;
-  var db = openDatabase(name, version, description, size);
+  this.db = openDatabase(name, version, description, size);
 
-  // テーブル作成
-  db.transaction(function(tx) {
+  this.db.transaction(function(tx) {
     tx.executeSql(`
       create table if not exists folders (
         id integer primary key autoincrement,
@@ -439,137 +436,132 @@ var Dao = function(){
       )
     `);
   });
+}
 
-  // フォルダー検索
-  this.findByParentId_folders = function(id, callback) {
-    db.transaction(function(tx) {
+Dao.prototype = {
+  findByParentId_folders: function(id, callback) {
+    this.db.transaction(function(tx) {
       tx.executeSql('select * from folders where parent_id=? order by id desc', [id],
-        function(tx, results) {
-          var list = [];
-          for (i = 0; i < results.rows.length; i++){
-            list.push({
-              id: results.rows.item(i).id,
-              name: results.rows.item(i).name,
-              parent_id: results.rows.item(i).parent_id
-            });
-          }
-          callback(list);
-        });
+      function(tx, results) {
+        var list = [];
+        for(i = 0; i < results.rows.length; i++) {
+          list.push({
+            id: results.rows.item(i).id,
+            name: results.rows.item(i).name,
+            parent_id: results.rows.item(i).parent_id
+          });
+        }
+        callback(list);
+      });
     });
-  }
+  },
 
-  // フォルダー内のブックマーク全件検索
-  this.findByFolderId_bookmarks = function(id,callback) {
-    db.transaction(function(tx) {
+  findByFolderId_bookmarks: function(id,callback) {
+    this.db.transaction(function(tx) {
       tx.executeSql('select * from bookmarks where folder_id = ? order by id desc', [id],
-        function(tx, results) {
-          var list = [];
-          for (i = 0; i < results.rows.length; i++){
-            list.push({
-              id: results.rows.item(i).id,
-              name: results.rows.item(i).name,
-              url: results.rows.item(i).url,
-              search_word: results.rows.item(i).search_word,
-              memo: results.rows.item(i).memo
-            });
-          }
-          callback(list);
-        });
+      function(tx, results) {
+        var list = [];
+        for(i = 0; i < results.rows.length; i++) {
+          list.push({
+            id: results.rows.item(i).id,
+            name: results.rows.item(i).name,
+            url: results.rows.item(i).url,
+            search_word: results.rows.item(i).search_word,
+            memo: results.rows.item(i).memo
+          });
+        }
+        callback(list);
+      });
     });
-  }
+  },
 
-  // 全ブックマーク全件検索
-  this.findAll_bookmarks = function(callback) {
-    db.transaction(function(tx) {
+  findAll_bookmarks: function(callback) {
+    this.db.transaction(function(tx) {
       tx.executeSql('select * from bookmarks', [],
-        function(tx, results) {
-          var list = [];
-          for (i = 0; i < results.rows.length; i++){
-            list.push({
-              id: results.rows.item(i).id,
-              name: results.rows.item(i).name,
-              url: results.rows.item(i).url,
-              search_word: results.rows.item(i).search_word,
-              memo: results.rows.item(i).memo
-            });
-          }
-          callback(list);
-        });
+      function(tx, results) {
+        var list = [];
+        for(i = 0; i < results.rows.length; i++) {
+          list.push({
+            id: results.rows.item(i).id,
+            name: results.rows.item(i).name,
+            url: results.rows.item(i).url,
+            search_word: results.rows.item(i).search_word,
+            memo: results.rows.item(i).memo
+          });
+        }
+        callback(list);
+      });
     });
-  }
+  },
 
-  // 配列ではき出す
-  this.exportArray = function(callback) {
-    db.transaction(function(tx) {
+  exportArray: function(callback) {
+    this.db.transaction(function(tx) {
       tx.executeSql('select * from bookmarks', [],
-        function(tx, results) {
-          var list = [];
-          for (i = 0; i < results.rows.length; i++){
-            list.push([
-              results.rows.item(i).name,
-              results.rows.item(i).url,
-              results.rows.item(i).search_word,
-              results.rows.item(i).memo
-            ]);
-          }
-          callback(list);
-        });
+      function(tx, results) {
+        var list = [];
+        for(i = 0; i < results.rows.length; i++) {
+          list.push([
+            results.rows.item(i).name,
+            results.rows.item(i).url,
+            results.rows.item(i).search_word,
+            results.rows.item(i).memo
+          ]);
+        }
+        callback(list);
+      });
     });
-  }
+  },
 
-  // 配列から読み込む
-  this.importArray = function(array) {
-    db.transaction(function(tx) {
+  importArray: function(array) {
+    this.db.transaction(function(tx) {
       for(i = 0; i < array.length; i++) {
-          tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [array[i][0], array[i][1], array[i][2], array[i][3]]);
+        tx.executeSql('insert into bookmarks (name, url, search_word, memo) values (?, ?, ?, ?)', [array[i][0], array[i][1], array[i][2], array[i][3]]);
       }
     });
-  }
+  },
 
-  //登録
-  this.insert = function(site, url, word, memo, folderId){
-    db.transaction(function(tx){
+  insert: function(site, url, word, memo, folderId) {
+    this.db.transaction(function(tx) {
       tx.executeSql('insert into bookmarks (name, url, search_word, memo, folder_id) values (?, ?, ?, ?, ?)', [site, url, word, memo, folderId]);
     });
-  }
+  },
 
-  this.getFolderInfoByFolderId = function(folder_id, callback){
+  getFolderInfoByFolderId: function(folder_id, callback) {
     var list = [];
-    if(folder_id == 0){
+    if(folder_id == 0) {
       list.push([
         "root", 0
       ]);
       callback(list);
     } else {
-      db.transaction(function(tx){
+      this.db.transaction(function(tx) {
         tx.executeSql('select name, parent_id from folders where id=?', [folder_id],
-          function(tx, results){
-              list.push([
-                results.rows.item(0).name,
-                results.rows.item(0).parent_id
-              ]);
-            callback(list);
-          });
+        function(tx, results) {
+          list.push([
+            results.rows.item(0).name,
+            results.rows.item(0).parent_id
+          ]);
+          callback(list);
+        });
       });
     }
-  }
+  },
 
-  this.deleteAllTables = function(){
-    db.transaction(function(tx){
+  deleteAllTables: function() {
+    this.db.transaction(function(tx) {
       tx.executeSql('drop table bookmarks');
       tx.executeSql('drop table folders');
     })
-  }
+  },
 
-  this.add_folder = function(name, parent_id, callback){
-    db.transaction(function(tx){
+  add_folder: function(name, parent_id, callback) {
+    this.db.transaction(function(tx) {
       tx.executeSql('insert into folders (name, parent_id) values (?, ?)', [name, parent_id],
       function(transaction, result) {
-              callback(result.insertId);
-          }, function() {
-              alert("DB SELECT Error!");
-          });
+        callback(result.insertId);
+      }, function() {
+        alert("DB SELECT Error!");
+      });
     });
   }
-
 }
