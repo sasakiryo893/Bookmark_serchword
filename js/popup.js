@@ -504,7 +504,8 @@ Dao.prototype = {
             results.rows.item(i).name,
             results.rows.item(i).url,
             results.rows.item(i).search_word,
-            results.rows.item(i).memo
+            results.rows.item(i).memo,
+            results.rows.item(i).folder_id
           ]);
         }
         callback(list);
